@@ -1,0 +1,2801 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DSA Ninja — Master DSA with C++</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+<style>
+:root{
+  --bg:#0d1117;
+  --surface:rgba(255,255,255,0.04);
+  --border:rgba(255,255,255,0.08);
+  --text:#e6edf3;
+  --text-dim:#8b949e;
+  --accent-cyan:#00e5ff;
+  --accent-purple:#b000ff;
+  --accent-pink:#ff2a6d;
+  --green:#3fb950;
+  --yellow:#e3b341;
+  --orange:#ff8c42;
+  --code-bg:#1e1e2e;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Inter,sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  line-height:1.6;
+  overflow-x:hidden;
+  position:relative;
+}
+body::before{
+  content:"";position:fixed;top:0;left:0;width:60vw;height:60vh;
+  background:radial-gradient(circle at top left,rgba(176,0,255,0.15),transparent 60%);
+  pointer-events:none;z-index:0;
+}
+header.top{
+  position:sticky;top:0;z-index:100;
+  background:rgba(13,17,23,0.85);
+  backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--border);
+  padding:14px 24px;
+  display:flex;align-items:center;gap:16px;
+}
+.logo{
+  font-size:1.4rem;font-weight:700;
+  background:linear-gradient(90deg,var(--accent-cyan),var(--accent-purple));
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.tagline{color:var(--text-dim);font-size:0.9rem}
+.credit-wrap{margin-left:auto;text-align:right;font-size:0.78rem;color:var(--text-dim);display:flex;flex-direction:column;align-items:flex-end;gap:2px}
+.credit-name{
+  font-size:1.1rem;font-weight:700;letter-spacing:0.3px;
+  background:linear-gradient(90deg,var(--accent-cyan),var(--accent-purple));
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.credit-role{font-size:0.75rem;color:var(--text-dim)}
+.hamburger{display:none;background:none;border:1px solid var(--border);color:var(--text);width:36px;height:36px;border-radius:8px;cursor:pointer;font-size:1.1rem}
+.layout{display:flex;min-height:calc(100vh - 70px);position:relative;z-index:1}
+aside.sidebar{
+  width:28%;min-width:260px;max-width:340px;
+  background:var(--surface);
+  backdrop-filter:blur(12px);
+  border-right:1px solid var(--border);
+  padding:20px 12px;
+  overflow-y:auto;
+  max-height:calc(100vh - 70px);
+  position:sticky;top:70px;
+}
+.cat{margin-bottom:8px}
+.cat-header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:10px 12px;cursor:pointer;border-radius:8px;
+  font-weight:600;color:var(--accent-cyan);font-size:0.85rem;
+  text-transform:uppercase;letter-spacing:0.5px;
+  transition:background 0.2s;
+}
+.cat-header:hover{background:rgba(0,229,255,0.05)}
+.cat-arrow{transition:transform 0.3s;font-size:0.7rem}
+.cat.collapsed .cat-arrow{transform:rotate(-90deg)}
+.cat-items{overflow:hidden;transition:max-height 0.3s ease;max-height:1000px}
+.cat.collapsed .cat-items{max-height:0}
+.topic-item{
+  padding:8px 12px 8px 16px;margin:2px 0;cursor:pointer;
+  border-left:3px solid transparent;border-radius:0 6px 6px 0;
+  font-size:0.88rem;color:var(--text-dim);
+  transition:all 0.2s;
+}
+.topic-item:hover{color:var(--text);background:rgba(255,255,255,0.03)}
+.topic-item.active{
+  color:var(--text);
+  border-left-color:var(--accent-cyan);
+  background:rgba(0,229,255,0.08);
+  box-shadow:inset 0 0 20px rgba(0,229,255,0.05);
+}
+main.content{flex:1;padding:32px;overflow-x:hidden;max-width:100%}
+.topic-header h1{font-size:2rem;margin-bottom:8px;background:linear-gradient(90deg,var(--text),var(--accent-cyan));-webkit-background-clip:text;background-clip:text;color:transparent}
+.topic-header p.desc{color:var(--text-dim);margin-bottom:24px}
+.card{
+  background:var(--surface);
+  backdrop-filter:blur(12px);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:20px;margin-bottom:20px;
+  transition:box-shadow 0.3s;
+}
+.card:hover{box-shadow:0 0 30px rgba(0,229,255,0.08)}
+.card h2{font-size:1.2rem;margin-bottom:12px;color:var(--accent-cyan)}
+.card p{margin-bottom:10px;color:var(--text)}
+.card p strong{color:var(--accent-cyan)}
+.code-wrap{position:relative;margin-top:12px}
+.code-wrap pre{background:var(--code-bg)!important;border-radius:8px;padding:16px!important;overflow-x:auto;font-size:0.85rem;border:1px solid var(--border)}
+.copy-btn{
+  position:absolute;top:8px;right:8px;
+  background:rgba(255,255,255,0.06);
+  border:1px solid var(--border);
+  color:var(--text);
+  padding:5px 12px;border-radius:6px;cursor:pointer;
+  font-size:0.75rem;transition:all 0.2s;z-index:2;
+}
+.copy-btn:hover{background:var(--accent-cyan);color:#000}
+.toast{
+  position:fixed;bottom:30px;left:50%;transform:translateX(-50%);
+  background:var(--accent-cyan);color:#000;
+  padding:10px 20px;border-radius:20px;font-weight:600;
+  z-index:1000;opacity:0;transition:opacity 0.3s;pointer-events:none;
+}
+.toast.show{opacity:1}
+.complexity-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-top:12px}
+.cx-row{display:flex;flex-direction:column;gap:6px;padding:10px;background:rgba(0,0,0,0.2);border-radius:8px}
+.cx-label{font-size:0.75rem;color:var(--text-dim);text-transform:uppercase}
+.cx-badge{
+  display:inline-block;padding:4px 10px;border-radius:12px;font-size:0.8rem;
+  font-weight:600;font-family:monospace;
+}
+.cx-cyan{background:rgba(0,229,255,0.15);color:var(--accent-cyan);border:1px solid var(--accent-cyan)}
+.cx-green{background:rgba(63,185,80,0.15);color:var(--green);border:1px solid var(--green)}
+.cx-yellow{background:rgba(227,179,65,0.15);color:var(--yellow);border:1px solid var(--yellow)}
+.cx-orange{background:rgba(255,140,66,0.15);color:var(--orange);border:1px solid var(--orange)}
+.cx-pink{background:rgba(255,42,109,0.15);color:var(--accent-pink);border:1px solid var(--accent-pink)}
+.cx-bar{height:6px;border-radius:3px;background:rgba(255,255,255,0.05);overflow:hidden;margin-top:8px}
+.cx-bar-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--accent-cyan),var(--accent-purple),var(--accent-pink))}
+.controls{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:14px;align-items:center}
+.btn{
+  background:linear-gradient(135deg,rgba(0,229,255,0.1),rgba(176,0,255,0.1));
+  border:1px solid var(--border);color:var(--text);
+  padding:8px 18px;border-radius:20px;cursor:pointer;
+  font-size:0.85rem;transition:all 0.2s;
+  position:relative;
+}
+.btn::before{
+  content:"";position:absolute;inset:0;border-radius:20px;padding:1px;
+  background:linear-gradient(135deg,var(--accent-cyan),var(--accent-purple));
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+  -webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none;opacity:0.5;
+}
+.btn:hover{transform:scale(1.03);box-shadow:0 0 20px rgba(0,229,255,0.3)}
+.btn:hover::before{opacity:1}
+.btn:disabled{opacity:0.4;cursor:not-allowed;transform:none}
+.btn-pink::before{background:linear-gradient(135deg,var(--accent-pink),var(--accent-purple))}
+.input{
+  background:rgba(0,0,0,0.3);border:1px solid var(--border);
+  color:var(--text);padding:7px 12px;border-radius:18px;
+  font-size:0.85rem;width:120px;outline:none;
+}
+.input:focus{border-color:var(--accent-cyan)}
+.slider{accent-color:var(--accent-cyan);width:140px}
+.viz{
+  background:rgba(0,0,0,0.25);
+  border:1px solid var(--border);
+  border-radius:8px;
+  padding:16px;min-height:220px;
+  display:flex;align-items:flex-end;justify-content:center;gap:4px;
+  overflow:auto;position:relative;
+}
+.viz-svg{width:100%;height:100%;display:block}
+.bar{
+  flex:1;min-width:8px;max-width:40px;
+  background:linear-gradient(180deg,var(--accent-cyan),var(--accent-purple));
+  border-radius:4px 4px 0 0;
+  transition:all 0.3s ease;
+  display:flex;align-items:flex-end;justify-content:center;
+  color:#fff;font-size:0.7rem;font-weight:600;padding-bottom:2px;
+  position:relative;
+}
+.bar.compare{background:linear-gradient(180deg,var(--accent-cyan),#0099aa)}
+.bar.swap{background:linear-gradient(180deg,var(--accent-pink),#aa1144)}
+.bar.sorted{background:linear-gradient(180deg,var(--green),#1a6a2e)}
+.bar.pivot{background:linear-gradient(180deg,var(--yellow),#9a7a20)}
+.status{
+  margin-top:10px;padding:10px;background:rgba(0,0,0,0.3);
+  border-radius:6px;font-size:0.85rem;color:var(--text-dim);
+  font-family:monospace;min-height:20px;
+}
+.status .hl{color:var(--accent-cyan)}
+.label{font-size:0.8rem;color:var(--text-dim);margin-right:4px}
+@keyframes confetti-fall{
+  0%{transform:translateY(-20vh) rotate(0);opacity:1}
+  100%{transform:translateY(110vh) rotate(720deg);opacity:0}
+}
+.confetti{position:fixed;width:10px;height:10px;top:0;pointer-events:none;z-index:9999;animation:confetti-fall 1.2s linear forwards}
+.tree-node circle{fill:var(--code-bg);stroke:var(--accent-cyan);stroke-width:2;transition:all 0.3s}
+.tree-node text{fill:var(--text);font-size:14px;text-anchor:middle;dominant-baseline:central;font-family:monospace}
+.tree-node.visit circle{fill:var(--accent-cyan);stroke:var(--accent-cyan)}
+.tree-node.visit text{fill:#000}
+.tree-node.found circle{fill:var(--accent-pink);stroke:var(--accent-pink)}
+.tree-edge{stroke:var(--text-dim);stroke-width:2;fill:none}
+.ll-node{display:inline-flex;align-items:center;margin:6px 0;transition:all 0.3s}
+.ll-box{
+  background:var(--surface);border:2px solid var(--accent-cyan);
+  padding:10px 16px;border-radius:8px;min-width:50px;text-align:center;
+  font-family:monospace;font-weight:600;color:var(--text);
+}
+.ll-box.hl{background:var(--accent-cyan);color:#000;transform:scale(1.1)}
+.ll-box.hl-pink{background:var(--accent-pink);color:#fff}
+.ll-arrow{color:var(--text-dim);margin:0 6px;font-size:1.3rem}
+.ll-row{display:flex;flex-wrap:wrap;align-items:center;padding:8px}
+.stack-vbox{display:flex;flex-direction:column-reverse;align-items:center;gap:4px;padding:10px;min-height:200px;justify-content:flex-start}
+.stack-cell{background:var(--surface);border:2px solid var(--accent-purple);padding:10px 30px;border-radius:6px;font-family:monospace;font-weight:600;transition:all 0.3s}
+.stack-cell.top{border-color:var(--accent-cyan);background:rgba(0,229,255,0.1)}
+.queue-hbox{display:flex;align-items:center;gap:6px;padding:10px;min-height:80px;overflow-x:auto}
+.queue-cell{background:var(--surface);border:2px solid var(--accent-purple);padding:10px 16px;border-radius:6px;font-family:monospace;font-weight:600;flex-shrink:0;transition:all 0.3s}
+.queue-cell.front{border-color:var(--accent-cyan)}
+.queue-cell.back{border-color:var(--accent-pink)}
+.array-row{display:flex;gap:4px;flex-wrap:wrap;padding:10px}
+.array-cell{
+  background:var(--surface);border:2px solid var(--border);
+  width:50px;height:50px;display:flex;align-items:center;justify-content:center;
+  font-family:monospace;font-weight:600;border-radius:6px;transition:all 0.3s;
+  position:relative;
+}
+.array-cell .idx{position:absolute;bottom:-18px;font-size:0.7rem;color:var(--text-dim);font-weight:400}
+.array-cell.compare{border-color:var(--accent-cyan);background:rgba(0,229,255,0.15)}
+.array-cell.found{border-color:var(--accent-pink);background:rgba(255,42,109,0.2)}
+.array-cell.range{border-color:var(--accent-purple)}
+.hash-table{display:grid;grid-template-columns:60px 1fr;gap:4px;padding:10px}
+.hash-idx{background:rgba(0,0,0,0.4);padding:8px;text-align:center;font-family:monospace;color:var(--text-dim);border-radius:4px}
+.hash-bucket{background:var(--surface);border:1px solid var(--border);padding:8px;border-radius:4px;min-height:36px;display:flex;flex-wrap:wrap;gap:6px;align-items:center;transition:all 0.3s}
+.hash-bucket.hl{border-color:var(--accent-cyan);background:rgba(0,229,255,0.1)}
+.hash-bucket.hl-pink{border-color:var(--accent-pink);background:rgba(255,42,109,0.1)}
+.hash-item{background:var(--accent-purple);color:#fff;padding:3px 10px;border-radius:12px;font-family:monospace;font-size:0.85rem}
+.diagram{padding:16px;display:flex;justify-content:center}
+.note{font-size:0.85rem;color:var(--text-dim);margin-top:8px;font-style:italic}
+@media (max-width:768px){
+  .hamburger{display:block}
+  aside.sidebar{
+    position:fixed;left:-100%;top:70px;width:80%;max-width:320px;
+    height:calc(100vh - 70px);z-index:50;transition:left 0.3s;
+  }
+  aside.sidebar.open{left:0}
+  main.content{padding:16px;width:100%}
+  .topic-header h1{font-size:1.5rem}
+  .credit-wrap{font-size:0.7rem}
+  .tagline{display:none}
+}
+</style>
+</head>
+<body>
+<header class="top">
+  <button class="hamburger" id="hamburger" aria-label="Toggle menu">☰</button>
+  <div>
+    <div class="logo">⚔ DSA Ninja</div>
+    <div class="tagline">Master Data Structures &amp; Algorithms with C++</div>
+  </div>
+  <div class="credit-wrap">
+    <span class="credit-name">Khaled Sokkar</span>
+    <span class="credit-role">Teaching Assistant @ FCAI &nbsp;·&nbsp; Offensive Security Engineer</span>
+  </div>
+</header>
+<div class="layout">
+  <aside class="sidebar" id="sidebar" aria-label="Topics navigation"><nav id="nav"></nav></aside>
+  <main class="content" id="content" role="main"></main>
+</div>
+<div class="toast" id="toast">Copied!</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-c.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-cpp.min.js"></script>
+<script>
+// ===== STATE =====
+const TOPICS=[
+ {cat:"Fundamentals",items:[
+  {id:"intro",title:"Introduction to DSA"},
+  {id:"complexity",title:"Time & Space Complexity"},
+  {id:"recursion",title:"Recursion"}]},
+ {cat:"Searching & Sorting",items:[
+  {id:"linear-search",title:"Linear Search"},
+  {id:"binary-search",title:"Binary Search"},
+  {id:"selection-sort",title:"Selection Sort"},
+  {id:"insertion-sort",title:"Insertion Sort"},
+  {id:"bubble-sort",title:"Bubble Sort"},
+  {id:"merge-sort",title:"Merge Sort"},
+  {id:"quick-sort",title:"Quick Sort"},
+  {id:"heap-sort",title:"Heap Sort"}]},
+ {cat:"Linear Data Structures",items:[
+  {id:"arrays",title:"Arrays"},
+  {id:"singly-ll",title:"Singly Linked List"},
+  {id:"doubly-ll",title:"Doubly Linked List"},
+  {id:"stack",title:"Stack"},
+  {id:"queue",title:"Queue"},
+  {id:"priority-queue",title:"Priority Queue"}]},
+ {cat:"Non-Linear Data Structures",items:[
+  {id:"binary-trees",title:"Binary Trees"},
+  {id:"bst",title:"Binary Search Trees"},
+  {id:"tree-traversals",title:"Tree Traversals"},
+  {id:"heaps",title:"Heaps"},
+  {id:"graphs",title:"Graphs"},
+  {id:"graph-rep",title:"Graph Representations"},
+  {id:"graph-traversals",title:"Graph Traversals"},
+  {id:"dijkstra",title:"Dijkstra's Shortest Path"}]},
+ {cat:"Hashing",items:[
+  {id:"hash-tables",title:"Hash Tables"},
+  {id:"hash-functions",title:"Hash Functions"},
+  {id:"collisions",title:"Collision Resolution"}]}
+];
+let currentTopic="intro";
+let teardownFns=[];
+const content=document.getElementById('content');
+const nav=document.getElementById('nav');
+const toast=document.getElementById('toast');
+
+// ===== UTILS =====
+const $=(id)=>document.getElementById(id);
+const sleep=(ms)=>new Promise(r=>setTimeout(r,ms));
+const rand=(min,max)=>Math.floor(Math.random()*(max-min+1))+min;
+function addTeardown(fn){teardownFns.push(fn);}
+function teardownAll(){teardownFns.forEach(f=>{try{f();}catch(e){}});teardownFns=[];}
+function showToast(msg="Copied!"){toast.textContent=msg;toast.classList.add('show');setTimeout(()=>toast.classList.remove('show'),1500);}
+function confetti(){
+  const colors=['#00e5ff','#b000ff','#ff2a6d','#3fb950','#e3b341'];
+  for(let i=0;i<30;i++){
+    const c=document.createElement('div');
+    c.className='confetti';
+    c.style.left=Math.random()*100+'vw';
+    c.style.background=colors[i%colors.length];
+    c.style.animationDelay=(Math.random()*0.3)+'s';
+    c.style.transform=`rotate(${Math.random()*360}deg)`;
+    document.body.appendChild(c);
+    setTimeout(()=>c.remove(),1800);
+  }
+}
+function cxBadge(v){
+  let cls='cx-cyan';
+  if(v.includes('n²')||v.includes('n^2'))cls='cx-orange';
+  else if(v.includes('n log n'))cls='cx-yellow';
+  else if(v.includes('2^n')||v.includes('n!'))cls='cx-pink';
+  else if(v==='O(n)'||v==='O(V+E)'||v.includes('O(n+'))cls='cx-green';
+  else if(v==='O(1)'||v.includes('log'))cls='cx-cyan';
+  return `<span class="cx-badge ${cls}">${v}</span>`;
+}
+function cxCard(best,avg,worst,space,barW=50){
+  return `<div class="card"><h2>Complexity Analysis</h2>
+   <div class="complexity-grid">
+    <div class="cx-row"><span class="cx-label">Time — Best</span>${cxBadge(best)}</div>
+    <div class="cx-row"><span class="cx-label">Time — Average</span>${cxBadge(avg)}</div>
+    <div class="cx-row"><span class="cx-label">Time — Worst</span>${cxBadge(worst)}</div>
+    <div class="cx-row"><span class="cx-label">Space</span>${cxBadge(space)}</div>
+   </div>
+   <div class="cx-bar"><div class="cx-bar-fill" style="width:${barW}%"></div></div></div>`;
+}
+function codeBlock(code){
+  const id='c'+Math.random().toString(36).slice(2,8);
+  return `<div class="card"><h2>C++ Implementation</h2><div class="code-wrap">
+   <button class="copy-btn" data-target="${id}" aria-label="Copy code">Copy</button>
+   <pre><code id="${id}" class="language-cpp">${escapeHtml(code)}</code></pre></div></div>`;
+}
+function escapeHtml(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function setupCopyButtons(){
+  document.querySelectorAll('.copy-btn').forEach(b=>{
+    const fn=()=>{
+      const el=$(b.dataset.target);
+      navigator.clipboard.writeText(el.textContent).then(()=>showToast('Copied!'));
+    };
+    b.addEventListener('click',fn);
+    addTeardown(()=>b.removeEventListener('click',fn));
+  });
+}
+function header(title,desc){return `<div class="topic-header"><h1>${title}</h1><p class="desc">${desc}</p></div>`;}
+function expl(html){return `<div class="card"><h2>Concept</h2>${html}</div>`;}
+function playground(inner){return `<div class="card"><h2>Interactive Playground</h2>${inner}</div>`;}
+
+// ===== ROUTER =====
+function buildNav(){
+  TOPICS.forEach((cat,ci)=>{
+    const d=document.createElement('div');d.className='cat';
+    d.innerHTML=`<div class="cat-header"><span>${cat.cat}</span><span class="cat-arrow">▼</span></div>
+     <div class="cat-items">${cat.items.map(t=>`<div class="topic-item" data-id="${t.id}" tabindex="0" role="link">${t.title}</div>`).join('')}</div>`;
+    nav.appendChild(d);
+    d.querySelector('.cat-header').addEventListener('click',()=>d.classList.toggle('collapsed'));
+  });
+  document.querySelectorAll('.topic-item').forEach(it=>{
+    const fn=()=>{loadTopic(it.dataset.id);if(window.innerWidth<=768)document.getElementById('sidebar').classList.remove('open');};
+    it.addEventListener('click',fn);
+    it.addEventListener('keydown',e=>{if(e.key==='Enter')fn();});
+  });
+}
+function loadTopic(id){
+  teardownAll();
+  currentTopic=id;
+  document.querySelectorAll('.topic-item').forEach(it=>{
+    if(it.dataset.id===id){it.classList.add('active');it.setAttribute('aria-current','page');}
+    else{it.classList.remove('active');it.removeAttribute('aria-current');}
+  });
+  const fn=RENDERERS[id];
+  content.innerHTML=fn?fn():'<p>Not found</p>';
+  setupCopyButtons();
+  if(window.Prism)Prism.highlightAllUnder(content);
+  const init=INITS[id];if(init)init();
+  content.scrollTop=0;window.scrollTo(0,0);
+}
+
+// ===== RENDERERS =====
+const RENDERERS={};
+const INITS={};
+</script>
+<script>
+// ===== RENDERERS: FUNDAMENTALS =====
+RENDERERS.intro=()=>header('Introduction to DSA','Abstract Data Types, Physical vs Logical Structures')+
+ expl(`<p>A <strong>Data Structure</strong> is a way of organizing data so that operations like search, insert, and delete can be performed efficiently. An <strong>Algorithm</strong> is a finite sequence of well-defined steps that solve a problem.</p>
+  <p>An <strong>Abstract Data Type (ADT)</strong> defines <em>what</em> operations are supported and their behavior, without specifying <em>how</em> they are implemented. For example, a Stack ADT supports push/pop/top — but you can implement it with an array or a linked list.</p>
+  <p><strong>Physical structure</strong> is how data is laid out in memory (contiguous like arrays, or linked via pointers). <strong>Logical structure</strong> describes the relationship between elements (linear like lists, hierarchical like trees, network-like like graphs).</p>
+  <p><strong>Primitive types</strong> (int, char, bool) are built into the language. <strong>Non-primitive types</strong> (arrays, lists, trees) are built from primitives.</p>`)+
+ codeBlock(`#include <iostream>     // For cout / cin (input-output streams)
+using namespace std;     // Avoids writing std:: before cout, endl, etc.
+
+// =====================================================================
+// Counter ADT: an Abstract Data Type with three operations.
+// "Abstract" because the user only sees the operations, not the storage.
+// =====================================================================
+class Counter {
+private:
+    int value;                          // The PHYSICAL storage: one int in memory.
+                                        // The user of the class never touches this directly.
+public:
+    Counter() : value(0) {}             // Constructor — runs when a Counter is created.
+                                        // The ": value(0)" syntax is a member-initializer list:
+                                        // it sets 'value' to 0 before the body runs.
+
+    void increment() { value++; }       // O(1) — adds 1 to 'value' (post-increment).
+    void decrement() { value--; }       // O(1) — subtracts 1.
+    int get() const { return value; }   // 'const' = this method does NOT modify the object.
+                                        // Returning by value is fine for primitives.
+};
+
+int main() {
+    Counter c;                          // Calls the default constructor — value = 0.
+    c.increment(); c.increment();       // value is now 2.
+    c.decrement();                      // value is now 1.
+    cout << "Counter: " << c.get() << endl;  // endl prints '\\n' and flushes the buffer.
+    return 0;                           // 0 means "program ended successfully".
+}`)+
+ cxCard('O(1)','O(1)','O(1)','O(1)',10)+
+ playground(`<div class="diagram"><svg viewBox="0 0 600 220" class="viz-svg" style="max-height:240px">
+   <rect x="20" y="20" width="260" height="170" rx="10" fill="rgba(0,229,255,0.05)" stroke="#00e5ff"/>
+   <text x="150" y="50" fill="#00e5ff" font-size="16" text-anchor="middle" font-weight="600">Primitive Types</text>
+   <text x="150" y="90" fill="#e6edf3" font-size="13" text-anchor="middle" font-family="monospace">int   char   bool</text>
+   <text x="150" y="115" fill="#e6edf3" font-size="13" text-anchor="middle" font-family="monospace">float   double</text>
+   <text x="150" y="160" fill="#8b949e" font-size="11" text-anchor="middle">Built into the language</text>
+
+   <rect x="320" y="20" width="260" height="170" rx="10" fill="rgba(176,0,255,0.05)" stroke="#b000ff"/>
+   <text x="450" y="50" fill="#b000ff" font-size="16" text-anchor="middle" font-weight="600">Non-Primitive Types</text>
+   <text x="450" y="90" fill="#e6edf3" font-size="13" text-anchor="middle" font-family="monospace">Array   LinkedList</text>
+   <text x="450" y="115" fill="#e6edf3" font-size="13" text-anchor="middle" font-family="monospace">Tree   Graph   Hash</text>
+   <text x="450" y="160" fill="#8b949e" font-size="11" text-anchor="middle">Composed from primitives</text>
+  </svg></div><p class="note">DSA is the art of choosing the right structure for the right problem.</p>`);
+
+RENDERERS.complexity=()=>header('Time & Space Complexity','Big O notation, growth rates, best/worst/average case')+
+ expl(`<p><strong>Big O</strong> notation describes how runtime or memory grows as input size <em>n</em> grows. We care about the dominant term and drop constants — so 3n+5 becomes <strong>O(n)</strong>.</p>
+  <p><strong>Best case</strong> is the lowest possible cost on any input; <strong>worst case</strong> is the highest; <strong>average case</strong> assumes a typical input. For linear search the best is O(1) (first element), worst is O(n) (last or absent).</p>
+  <p><strong>Space complexity</strong> measures auxiliary memory used. Recursive algorithms often use O(depth) stack space.</p>
+  <p>Common classes (cheapest → most expensive): <strong>O(1)</strong>, <strong>O(log n)</strong>, <strong>O(n)</strong>, <strong>O(n log n)</strong>, <strong>O(n²)</strong>, <strong>O(2ⁿ)</strong>, <strong>O(n!)</strong>.</p>`)+
+ codeBlock(`#include <iostream>
+#include <vector>           // std::vector — a dynamic (resizable) array
+using namespace std;
+
+// ---------------------------------------------------------------------
+// O(1) — Constant time. Runs in the same number of steps no matter
+// how big the input is. Here we just read element 0.
+// ---------------------------------------------------------------------
+int first(const vector<int>& v) { return v[0]; }
+// 'const vector<int>&' means: pass by reference (no copy) AND we promise
+// not to modify v. This is the standard way to pass containers.
+
+// ---------------------------------------------------------------------
+// O(n) — Linear time. Number of steps grows in proportion to n.
+// ---------------------------------------------------------------------
+int sumAll(const vector<int>& v) {
+    int s = 0;
+    for (int x : v) s += x;     // Range-based for: visits every element once → n iterations.
+    return s;
+}
+
+// ---------------------------------------------------------------------
+// O(n^2) — Quadratic. A nested loop where both run up to n times.
+// 10 elements → 100 steps, 1000 elements → 1,000,000 steps. Be careful!
+// ---------------------------------------------------------------------
+bool hasDuplicate(const vector<int>& v) {
+    for (size_t i = 0; i < v.size(); i++)              // outer loop: n times
+        for (size_t j = i+1; j < v.size(); j++)        // inner loop: up to n times
+            if (v[i] == v[j]) return true;             // duplicate found → early exit
+    return false;                                      // no duplicates
+}
+
+// ---------------------------------------------------------------------
+// O(log n) — Logarithmic. We cut the problem in half each step.
+// 1,000,000 elements → only ~20 comparisons. Requires SORTED input.
+// ---------------------------------------------------------------------
+int binarySearch(const vector<int>& v, int target) {
+    int lo = 0, hi = v.size()-1;                       // search window [lo, hi]
+    while (lo <= hi) {
+        int mid = lo + (hi-lo)/2;                      // Safer than (lo+hi)/2 — avoids int overflow
+                                                       // when lo+hi exceeds INT_MAX on huge arrays.
+        if (v[mid] == target) return mid;              // found at index 'mid'
+        if (v[mid] < target) lo = mid+1;               // target must be in right half
+        else                 hi = mid-1;               // target must be in left half
+    }
+    return -1;                                         // -1 is our convention for "not found"
+}
+
+int main() {
+    vector<int> v = {1,2,3,4,5,6,7,8};
+    cout << sumAll(v) << " " << binarySearch(v, 5) << endl;  // prints: 36 4
+    return 0;
+}`)+
+ cxCard('O(1)','varies','O(n!)','varies',60)+
+ playground(`<div class="diagram"><svg id="cx-chart" viewBox="0 0 600 280" class="viz-svg" style="max-height:300px"></svg></div>
+  <p class="note">Growth comparison for n = 1..20. Notice how exponential dwarfs everything else.</p>`);
+INITS.complexity=()=>{
+  const svg=$('cx-chart');
+  const W=600,H=280,pad=30;
+  const funcs=[
+    {name:'O(1)',color:'#00e5ff',f:n=>1},
+    {name:'O(log n)',color:'#3fb950',f:n=>Math.log2(n+1)},
+    {name:'O(n)',color:'#e3b341',f:n=>n},
+    {name:'O(n log n)',color:'#ff8c42',f:n=>n*Math.log2(n+1)},
+    {name:'O(n²)',color:'#ff2a6d',f:n=>n*n},
+    {name:'O(2ⁿ)',color:'#b000ff',f:n=>Math.pow(2,Math.min(n,12))}
+  ];
+  const N=20,maxY=200;
+  let html=`<line x1="${pad}" y1="${H-pad}" x2="${W-pad}" y2="${H-pad}" stroke="#8b949e"/>
+   <line x1="${pad}" y1="${pad}" x2="${pad}" y2="${H-pad}" stroke="#8b949e"/>
+   <text x="${W/2}" y="${H-5}" fill="#8b949e" font-size="11" text-anchor="middle">input size n →</text>`;
+  funcs.forEach((fn,i)=>{
+    let pts=[];
+    for(let n=1;n<=N;n++){
+      const y=Math.min(fn.f(n),maxY);
+      const px=pad+(n-1)/(N-1)*(W-2*pad);
+      const py=H-pad-(y/maxY)*(H-2*pad);
+      pts.push(`${px},${py}`);
+    }
+    html+=`<polyline fill="none" stroke="${fn.color}" stroke-width="2" points="${pts.join(' ')}"/>`;
+    html+=`<text x="${W-pad-90}" y="${30+i*20}" fill="${fn.color}" font-size="12">${fn.name}</text>`;
+    html+=`<rect x="${W-pad-110}" y="${22+i*20}" width="12" height="10" fill="${fn.color}"/>`;
+  });
+  svg.innerHTML=html;
+};
+
+RENDERERS.recursion=()=>header('Recursion','Base case, recursive case, call stack, tail vs non-tail')+
+ expl(`<p><strong>Recursion</strong> is when a function calls itself. Every recursive function needs a <strong>base case</strong> (when to stop) and a <strong>recursive case</strong> (how to reduce the problem).</p>
+  <p>Each call pushes a new <strong>stack frame</strong> with its own local variables. If there's no base case, the stack overflows.</p>
+  <p>A <strong>tail-recursive</strong> call is the last action in the function — some compilers optimize it into a loop. A <strong>non-tail</strong> recursive call does work after the recursive call returns (like building factorial's product).</p>
+  <p>Recursion is natural for problems with self-similar substructure: trees, divide-and-conquer, backtracking.</p>`)+
+ codeBlock(`#include <iostream>
+using namespace std;
+
+// ---------------------------------------------------------------------
+// NON-TAIL recursion: after the recursive call returns, we still
+// have work to do (the multiplication 'n * ...'). The compiler must
+// keep this call's stack frame alive until the inner call returns.
+// ---------------------------------------------------------------------
+int factorial(int n) {
+    if (n <= 1) return 1;            // BASE CASE: stops the recursion. Without it → infinite loop → stack overflow.
+    return n * factorial(n - 1);     // RECURSIVE CASE: shrink the problem (n → n-1) and combine.
+                                     // Trace factorial(4):
+                                     //   4 * factorial(3)
+                                     //       3 * factorial(2)
+                                     //           2 * factorial(1)
+                                     //               return 1
+                                     // Then it unwinds: 2*1 → 3*2 → 4*6 → 24.
+}
+
+// ---------------------------------------------------------------------
+// TAIL recursion: the recursive call is the VERY LAST thing the
+// function does. We carry the partial result in an 'accumulator'.
+// Some compilers optimize this into a loop (no extra stack frames).
+// ---------------------------------------------------------------------
+int factorialTail(int n, int acc = 1) {   // 'acc = 1' is a default argument
+    if (n <= 1) return acc;               // Base case returns the accumulated product.
+    return factorialTail(n - 1, n * acc); // The multiplication happens BEFORE the recursive call,
+                                          // so nothing is left to do after it returns.
+}
+
+int main() {
+    cout << factorial(4) << endl;     // 4*3*2*1 = 24
+    cout << factorialTail(5) << endl; // 5*4*3*2*1 = 120
+    return 0;
+}`)+
+ cxCard('O(n)','O(n)','O(n)','O(n)',30)+
+ playground(`<div class="diagram"><svg viewBox="0 0 600 320" class="viz-svg" style="max-height:340px">
+   ${[0,1,2,3,4].map((i,idx)=>{
+     const y=20+idx*55;const label=['factorial(4)','factorial(3)','factorial(2)','factorial(1)','returns 1'][idx];
+     const work=['4 * factorial(3)','3 * factorial(2)','2 * factorial(1)','1  (base case)','— unwinds —'][idx];
+     return `<rect x="${60+idx*15}" y="${y}" width="380" height="40" rx="6" fill="rgba(0,229,255,${0.05+idx*0.04})" stroke="#00e5ff"/>
+       <text x="${75+idx*15}" y="${y+18}" fill="#e6edf3" font-size="13" font-family="monospace" font-weight="600">${label}</text>
+       <text x="${75+idx*15}" y="${y+35}" fill="#8b949e" font-size="11" font-family="monospace">${work}</text>`;
+   }).join('')}
+   <text x="300" y="305" fill="#8b949e" font-size="12" text-anchor="middle">Call stack grows downward, then unwinds: 1 → 2 → 6 → 24</text>
+  </svg></div>`);
+</script>
+<script>
+// ===== RENDERERS: SEARCHING =====
+RENDERERS['linear-search']=()=>header('Linear Search','Scan left-to-right until found — O(n)')+
+ expl(`<p><strong>Linear Search</strong> walks the array from index 0 to n-1, comparing each element to the target. Works on any array — sorted or unsorted.</p>
+  <p>It's simple but slow on large data. Use it when arrays are small or unsorted.</p>`)+
+ codeBlock(`#include <iostream>
+#include <vector>
+using namespace std;
+
+// ---------------------------------------------------------------------
+// Linear Search — works on ANY array (sorted or not).
+// Walks left-to-right comparing each element to the target.
+// ---------------------------------------------------------------------
+int linearSearch(const vector<int>& v, int target) {
+    for (int i = 0; i < (int)v.size(); i++) {  // (int) cast: v.size() returns size_t (unsigned)
+                                               // mixing with signed 'i' can cause warnings.
+        if (v[i] == target) return i;          // Found! Return the index immediately (early exit).
+    }
+    return -1;                                 // Looped through everything — target not present.
+                                               // We use -1 because valid indices are 0..n-1.
+}
+
+int main() {
+    vector<int> v = {5, 3, 8, 1, 9, 2};
+    cout << linearSearch(v, 8) << endl;  // 8 is at index 2 → prints 2
+    cout << linearSearch(v, 7) << endl;  // 7 is not in v → prints -1
+    return 0;
+}`)+
+ cxCard('O(1)','O(n)','O(n)','O(1)',35)+
+ playground(`<div class="controls">
+   <button class="btn" id="ls-rand">Randomize</button>
+   <button class="btn" id="ls-reset">Reset</button>
+   <button class="btn" id="ls-step">Step</button>
+   <button class="btn" id="ls-play">Play</button>
+   <span class="label">Target:</span><input class="input" id="ls-target" type="number" value="7" style="width:80px">
+   <span class="label">Speed:</span><input class="slider" id="ls-speed" type="range" min="50" max="1500" value="500">
+  </div>
+  <div class="viz" id="ls-viz" style="align-items:center;min-height:100px"></div>
+  <div class="status" id="ls-status" aria-live="polite">Press Step or Play to search.</div>`);
+INITS['linear-search']=()=>linearSearchPg();
+
+RENDERERS['binary-search']=()=>header('Binary Search','Halve the search range each step — O(log n) on a sorted array')+
+ expl(`<p><strong>Binary Search</strong> requires a sorted array. It compares the target with the middle element and discards half the array each step.</p>
+  <p>Pitfall: compute mid as <code>lo + (hi-lo)/2</code> to avoid integer overflow on huge arrays.</p>`)+
+ codeBlock(`#include <iostream>
+#include <vector>
+using namespace std;
+
+// ---------------------------------------------------------------------
+// Binary Search — REQUIRES a sorted array.
+// Each step compares the middle element to the target and discards
+// half the remaining range. log2(1,000,000) ≈ 20 steps max!
+// ---------------------------------------------------------------------
+int binarySearch(const vector<int>& v, int target) {
+    int lo = 0, hi = v.size() - 1;          // [lo, hi] is the current search window.
+    while (lo <= hi) {                      // loop while the window is non-empty
+        int mid = lo + (hi - lo) / 2;       // PITFALL: using (lo+hi)/2 can OVERFLOW int
+                                            // when lo+hi > 2^31-1. This form is safe.
+        if (v[mid] == target) return mid;   // found!
+        if (v[mid] < target) lo = mid + 1;  // mid is too small → target must be on the right
+        else                 hi = mid - 1;  // mid is too big → target must be on the left
+    }
+    return -1;                              // window became empty → target absent
+}
+
+int main() {
+    vector<int> v = {1, 3, 5, 7, 9, 11, 13, 15};  // MUST be sorted for binary search to work
+    cout << binarySearch(v, 7) << endl;            // 7 is at index 3 → prints 3
+    return 0;
+}`)+
+ cxCard('O(1)','O(log n)','O(log n)','O(1)',20)+
+ playground(`<div class="controls">
+   <button class="btn" id="bs-rand">Randomize</button>
+   <button class="btn" id="bs-reset">Reset</button>
+   <button class="btn" id="bs-step">Step</button>
+   <button class="btn" id="bs-play">Play</button>
+   <span class="label">Target:</span><input class="input" id="bs-target" type="number" value="9" style="width:80px">
+   <span class="label">Speed:</span><input class="slider" id="bs-speed" type="range" min="50" max="1500" value="600">
+  </div>
+  <div class="viz" id="bs-viz" style="align-items:center;min-height:120px"></div>
+  <div class="status" id="bs-status" aria-live="polite">Press Step or Play.</div>`);
+INITS['binary-search']=()=>binarySearchPg();
+
+// Sorting renderers — they share a similar shape
+function sortPlayground(prefix){
+  return `<div class="controls">
+   <button class="btn" id="${prefix}-rand">Randomize</button>
+   <button class="btn" id="${prefix}-reset">Reset</button>
+   <button class="btn" id="${prefix}-step">Step</button>
+   <button class="btn" id="${prefix}-play">Play</button>
+   <span class="label">Speed:</span><input class="slider" id="${prefix}-speed" type="range" min="50" max="1500" value="300">
+  </div>
+  <div class="viz" id="${prefix}-viz"></div>
+  <div class="status" id="${prefix}-status" aria-live="polite">Press Step or Play.</div>`;
+}
+
+RENDERERS['selection-sort']=()=>header('Selection Sort','Repeatedly find the minimum of the unsorted suffix and place it at the front — O(n²)')+
+ expl(`<p><strong>Selection Sort</strong> divides the array into a sorted prefix and an unsorted suffix. Each pass finds the minimum of the suffix and swaps it to the boundary.</p>
+  <p>Always O(n²) — even on a sorted array — but uses only O(1) extra space and performs at most n-1 swaps.</p>`)+
+ codeBlock(`#include <iostream>
+#include <vector>
+using namespace std;
+
+// ---------------------------------------------------------------------
+// Selection Sort:
+//   - Picture the array as two parts: a sorted PREFIX and an unsorted SUFFIX.
+//   - Each pass: scan the suffix to find its minimum, then swap it
+//     with the first element of the suffix (extending the prefix by 1).
+// Pros: only O(n) swaps total. Cons: always O(n²) comparisons.
+// ---------------------------------------------------------------------
+void selectionSort(vector<int>& v) {        // pass by reference (&) → modifies the caller's vector
+    int n = v.size();
+    for (int i = 0; i < n - 1; i++) {       // 'i' marks the boundary between sorted prefix and unsorted suffix
+        int minIdx = i;                     // assume the first unsorted element is the min so far
+        for (int j = i + 1; j < n; j++) {   // scan the rest of the suffix
+            if (v[j] < v[minIdx]) minIdx = j;  // found a smaller value → update minIdx
+        }
+        if (minIdx != i)
+            swap(v[i], v[minIdx]);          // put the true min at position i
+                                            // (skip the swap if i was already the min — small optimization)
+    }
+}
+
+int main() {
+    vector<int> v = {64, 25, 12, 22, 11};
+    selectionSort(v);
+    for (int x : v) cout << x << " ";       // prints: 11 12 22 25 64
+    return 0;
+}`)+
+ cxCard('O(n²)','O(n²)','O(n²)','O(1)',75)+
+ playground(sortPlayground('ss'));
+INITS['selection-sort']=()=>sortPg('ss','selection');
+
+RENDERERS['insertion-sort']=()=>header('Insertion Sort','Insert each element into its place in the sorted prefix — O(n) best, O(n²) worst')+
+ expl(`<p><strong>Insertion Sort</strong> builds the sorted array one element at a time. For each element, it shifts larger elements right until the correct position is found.</p>
+  <p>Excellent on small or nearly-sorted arrays. <strong>Stable</strong> and <strong>in-place</strong>.</p>`)+
+ codeBlock(`#include <iostream>
+#include <vector>
+using namespace std;
+
+// ---------------------------------------------------------------------
+// Insertion Sort — like sorting playing cards in your hand:
+//   - Treat v[0..i-1] as already sorted.
+//   - Take v[i] and slide it left into its correct place.
+// Excellent on small or nearly-sorted input (O(n) best case).
+// ---------------------------------------------------------------------
+void insertionSort(vector<int>& v) {
+    for (int i = 1; i < (int)v.size(); i++) {  // start at 1 — a single element is trivially sorted
+        int key = v[i];                        // the element we are currently placing
+        int j = i - 1;                         // index of the last element in the sorted prefix
+
+        // Shift every element greater than 'key' one position to the right,
+        // making room for 'key'. Stop when we find an element ≤ key, or hit the left edge.
+        while (j >= 0 && v[j] > key) {
+            v[j + 1] = v[j];                   // shift right
+            j--;
+        }
+        v[j + 1] = key;                        // drop 'key' into the hole we created
+    }
+}
+
+int main() {
+    vector<int> v = {12, 11, 13, 5, 6};
+    insertionSort(v);
+    for (int x : v) cout << x << " ";          // prints: 5 6 11 12 13
+    return 0;
+}`)+
+ cxCard('O(n)','O(n²)','O(n²)','O(1)',65)+
+ playground(sortPlayground('is'));
+INITS['insertion-sort']=()=>sortPg('is','insertion');
+
+RENDERERS['bubble-sort']=()=>header('Bubble Sort','Repeatedly swap adjacent out-of-order pairs — O(n²)')+
+ expl(`<p><strong>Bubble Sort</strong> walks the array swapping adjacent elements that are out of order. After one pass the largest element has "bubbled" to the end.</p>
+  <p>With an early-exit flag, it runs in O(n) on already-sorted input. Otherwise O(n²). Easy to teach, rarely used in practice.</p>`)+
+ codeBlock(`#include <iostream>
+#include <vector>
+using namespace std;
+
+// ---------------------------------------------------------------------
+// Bubble Sort — repeatedly walk the array, swapping any adjacent pair
+// that's out of order. After pass k, the k largest elements are
+// "bubbled" to the end and are in their final position.
+// ---------------------------------------------------------------------
+void bubbleSort(vector<int>& v) {
+    int n = v.size();
+    for (int i = 0; i < n - 1; i++) {            // n-1 passes are enough
+        bool swapped = false;                    // OPTIMIZATION: track if any swap happened
+        for (int j = 0; j < n - 1 - i; j++) {    // '- i' skips the already-sorted tail
+            if (v[j] > v[j + 1]) {               // adjacent pair out of order?
+                swap(v[j], v[j + 1]);            // fix them
+                swapped = true;
+            }
+        }
+        if (!swapped) break;                     // No swaps this pass → array is sorted.
+                                                 // This gives O(n) best-case on sorted input.
+    }
+}
+
+int main() {
+    vector<int> v = {5, 1, 4, 2, 8};
+    bubbleSort(v);
+    for (int x : v) cout << x << " ";            // prints: 1 2 4 5 8
+    return 0;
+}`)+
+ cxCard('O(n)','O(n²)','O(n²)','O(1)',75)+
+ playground(sortPlayground('bs2'));
+INITS['bubble-sort']=()=>sortPg('bs2','bubble');
+
+RENDERERS['merge-sort']=()=>header('Merge Sort','Divide the array, sort halves, merge — O(n log n) guaranteed')+
+ expl(`<p><strong>Merge Sort</strong> is a divide-and-conquer algorithm: split the array in half, sort each half recursively, then merge the two sorted halves in linear time.</p>
+  <p>Always O(n log n) — best, worst, and average. Uses O(n) auxiliary space. <strong>Stable</strong>.</p>`)+
+ codeBlock(`#include <iostream>
+#include <vector>
+using namespace std;
+
+// ---------------------------------------------------------------------
+// MERGE step: given v[l..m] and v[m+1..r] both already sorted,
+// combine them into one sorted run v[l..r]. Runs in O(r-l+1).
+// ---------------------------------------------------------------------
+void merge(vector<int>& v, int l, int m, int r) {
+    vector<int> tmp(r - l + 1);                  // temporary buffer to hold the merged result
+    int i = l, j = m + 1, k = 0;                 // i → left run, j → right run, k → tmp
+
+    // Pick the smaller of v[i] and v[j] and copy it to tmp.
+    while (i <= m && j <= r) {
+        if (v[i] <= v[j]) tmp[k++] = v[i++];     // '<=' keeps the sort STABLE
+        else              tmp[k++] = v[j++];
+    }
+    // One of the runs is exhausted — copy whatever's left of the other.
+    while (i <= m) tmp[k++] = v[i++];
+    while (j <= r) tmp[k++] = v[j++];
+
+    // Copy tmp back into v[l..r]. We can't write directly into v above
+    // because that would overwrite data we still need to read.
+    for (int x = 0; x < (int)tmp.size(); x++) v[l + x] = tmp[x];
+}
+
+// ---------------------------------------------------------------------
+// DIVIDE-AND-CONQUER: split, recurse, merge.
+// Recursion depth = O(log n), each level does O(n) merging → O(n log n).
+// ---------------------------------------------------------------------
+void mergeSort(vector<int>& v, int l, int r) {
+    if (l >= r) return;                          // BASE CASE: 0 or 1 element is already sorted
+    int m = l + (r - l) / 2;                     // overflow-safe midpoint
+    mergeSort(v, l, m);                          // sort the left half
+    mergeSort(v, m + 1, r);                      // sort the right half
+    merge(v, l, m, r);                           // merge the two sorted halves
+}
+
+int main() {
+    vector<int> v = {38, 27, 43, 3, 9, 82, 10};
+    mergeSort(v, 0, v.size() - 1);
+    for (int x : v) cout << x << " ";            // prints: 3 9 10 27 38 43 82
+    return 0;
+}`)+
+ cxCard('O(n log n)','O(n log n)','O(n log n)','O(n)',55)+
+ playground(sortPlayground('ms'));
+INITS['merge-sort']=()=>sortPg('ms','merge');
+
+RENDERERS['quick-sort']=()=>header('Quick Sort','Partition around a pivot, recurse on each side — O(n log n) average')+
+ expl(`<p><strong>Quick Sort</strong> chooses a <strong>pivot</strong>, partitions the array so smaller elements are left and larger are right of the pivot, then recursively sorts each side.</p>
+  <p>Fast in practice — O(n log n) average — but O(n²) worst case if the pivot is consistently the min or max. Randomized pivots avoid the worst case in practice.</p>`)+
+ codeBlock(`#include <iostream>
+#include <vector>
+using namespace std;
+
+// ---------------------------------------------------------------------
+// LOMUTO PARTITION:
+//   - Choose the last element v[hi] as the 'pivot'.
+//   - Rearrange v[lo..hi] so that everything ≤ pivot comes first,
+//     then the pivot, then everything > pivot.
+//   - Return the final index of the pivot.
+// ---------------------------------------------------------------------
+int partition(vector<int>& v, int lo, int hi) {
+    int pivot = v[hi];                       // pivot value
+    int i = lo - 1;                          // 'i' tracks the boundary of the "≤ pivot" zone
+    for (int j = lo; j < hi; j++) {          // 'j' scans every element except the pivot
+        if (v[j] <= pivot) {
+            i++;                             // grow the "≤ pivot" zone by 1
+            swap(v[i], v[j]);                // bring this small value into the zone
+        }
+    }
+    swap(v[i + 1], v[hi]);                   // finally put the pivot right after the zone
+    return i + 1;                            // pivot's final, correct index
+}
+
+// ---------------------------------------------------------------------
+// QUICK SORT — divide-and-conquer around a pivot.
+// Average O(n log n) — usually FASTER than merge sort due to cache locality.
+// WORST O(n²) when partitioning is unbalanced (e.g., already-sorted input
+// with last-element pivot). Use randomized or median-of-three pivots in practice.
+// ---------------------------------------------------------------------
+void quickSort(vector<int>& v, int lo, int hi) {
+    if (lo < hi) {                           // base case: 0 or 1 element → already sorted
+        int p = partition(v, lo, hi);        // pivot now at its final position 'p'
+        quickSort(v, lo, p - 1);             // sort the left side (< pivot)
+        quickSort(v, p + 1, hi);             // sort the right side (> pivot)
+    }
+}
+
+int main() {
+    vector<int> v = {10, 7, 8, 9, 1, 5};
+    quickSort(v, 0, v.size() - 1);
+    for (int x : v) cout << x << " ";        // prints: 1 5 7 8 9 10
+    return 0;
+}`)+
+ cxCard('O(n log n)','O(n log n)','O(n²)','O(log n)',55)+
+ playground(sortPlayground('qs'));
+INITS['quick-sort']=()=>sortPg('qs','quick');
+
+RENDERERS['heap-sort']=()=>header('Heap Sort','Build a max-heap, repeatedly extract max — O(n log n)')+
+ expl(`<p><strong>Heap Sort</strong> first transforms the array into a max-heap, then repeatedly swaps the root (max) with the last element and shrinks the heap by one, sifting the new root down.</p>
+  <p>O(n log n) worst case, O(1) extra space — but not stable.</p>`)+
+ codeBlock(`#include <iostream>
+#include <vector>
+using namespace std;
+
+// ---------------------------------------------------------------------
+// HEAPIFY (sift-down): assume v[i]'s subtree is a max-heap EXCEPT that
+// v[i] itself may violate the rule. Bubble v[i] down until it's larger
+// than both its children (or it becomes a leaf).
+//
+// Array layout of a binary heap (0-indexed):
+//   parent(i)      = (i-1)/2
+//   left child(i)  =  2*i + 1
+//   right child(i) =  2*i + 2
+// ---------------------------------------------------------------------
+void heapify(vector<int>& v, int n, int i) {
+    int largest = i;                             // assume current node is the biggest
+    int l = 2*i + 1, r = 2*i + 2;                // indices of left and right children
+    if (l < n && v[l] > v[largest]) largest = l; // left child exists AND is bigger
+    if (r < n && v[r] > v[largest]) largest = r; // right child is bigger still
+    if (largest != i) {
+        swap(v[i], v[largest]);                  // move the bigger child up
+        heapify(v, n, largest);                  // continue sifting down at the new position
+    }
+}
+
+// ---------------------------------------------------------------------
+// HEAP SORT — two phases:
+//   PHASE 1: turn the whole array into a max-heap (O(n)).
+//   PHASE 2: n-1 times, swap the root (current max) with the last
+//            unsorted element, shrink the heap by 1, re-heapify the root.
+// ---------------------------------------------------------------------
+void heapSort(vector<int>& v) {
+    int n = v.size();
+    // Build the heap: heapify every non-leaf node, starting from the bottom.
+    // Leaves (indices n/2 .. n-1) are already trivially heaps of size 1.
+    for (int i = n/2 - 1; i >= 0; i--) heapify(v, n, i);
+
+    // Repeatedly extract the max to the end of the array.
+    for (int i = n - 1; i > 0; i--) {
+        swap(v[0], v[i]);                        // move the current max to position i (its final spot)
+        heapify(v, i, 0);                        // 'i' is the new heap size (excludes the sorted suffix)
+    }
+}
+
+int main() {
+    vector<int> v = {12, 11, 13, 5, 6, 7};
+    heapSort(v);
+    for (int x : v) cout << x << " ";            // prints: 5 6 7 11 12 13
+    return 0;
+}`)+
+ cxCard('O(n log n)','O(n log n)','O(n log n)','O(1)',55)+
+ playground(sortPlayground('hs'));
+INITS['heap-sort']=()=>sortPg('hs','heap');
+</script>
+<script>
+// ===== PLAYGROUNDS: SEARCHING =====
+function renderBars(viz,arr,states){
+  const max=Math.max(...arr,1);
+  viz.innerHTML=arr.map((v,i)=>{
+    const h=(v/max)*180+20;
+    const cls=states&&states[i]?'bar '+states[i]:'bar';
+    return `<div class="${cls}" style="height:${h}px">${v}</div>`;
+  }).join('');
+}
+function renderCells(viz,arr,states){
+  viz.style.alignItems='center';
+  viz.innerHTML='<div class="array-row">'+arr.map((v,i)=>{
+    const cls=states&&states[i]?'array-cell '+states[i]:'array-cell';
+    return `<div class="${cls}">${v}<span class="idx">${i}</span></div>`;
+  }).join('')+'</div>';
+}
+
+function linearSearchPg(){
+  const viz=$('ls-viz'),status=$('ls-status'),target=$('ls-target'),speed=$('ls-speed');
+  let arr=[],i=0,done=false,timer=null;
+  function reset(){arr=[3,7,2,9,4,7,1,8,5];i=0;done=false;draw();status.textContent='Ready.';}
+  function randomize(){arr=Array.from({length:10},()=>rand(1,20));i=0;done=false;draw();status.textContent='Randomized.';}
+  function draw(){
+    const states=arr.map((_,idx)=>idx<i?'':(idx===i?'compare':''));
+    renderCells(viz,arr,states);
+  }
+  function step(){
+    if(done)return;
+    const t=parseInt(target.value);
+    if(i>=arr.length){status.textContent=`Not found.`;done=true;return;}
+    if(arr[i]===t){
+      const states=arr.map((_,idx)=>idx===i?'found':'');
+      renderCells(viz,arr,states);
+      status.innerHTML=`Found <span class="hl">${t}</span> at index <span class="hl">${i}</span>`;
+      done=true;confetti();return;
+    }
+    status.innerHTML=`Checking index <span class="hl">${i}</span>: ${arr[i]} ≠ ${t}`;
+    i++;draw();
+  }
+  function play(){
+    if(timer){clearInterval(timer);timer=null;$('ls-play').textContent='Play';return;}
+    $('ls-play').textContent='Pause';
+    timer=setInterval(()=>{if(done){clearInterval(timer);timer=null;$('ls-play').textContent='Play';return;}step();},parseInt(speed.value));
+  }
+  reset();
+  $('ls-rand').addEventListener('click',randomize);
+  $('ls-reset').addEventListener('click',reset);
+  $('ls-step').addEventListener('click',step);
+  $('ls-play').addEventListener('click',play);
+  addTeardown(()=>{if(timer)clearInterval(timer);});
+}
+
+function binarySearchPg(){
+  const viz=$('bs-viz'),status=$('bs-status'),target=$('bs-target'),speed=$('bs-speed');
+  let arr=[],lo=0,hi=0,mid=-1,done=false,timer=null;
+  function reset(){arr=[1,3,5,7,9,11,13,15,17,19];lo=0;hi=arr.length-1;mid=-1;done=false;draw();status.textContent='Ready.';}
+  function randomize(){
+    const set=new Set();while(set.size<10)set.add(rand(1,40));
+    arr=[...set].sort((a,b)=>a-b);lo=0;hi=arr.length-1;mid=-1;done=false;draw();status.textContent='Randomized & sorted.';
+  }
+  function draw(){
+    const states=arr.map((_,idx)=>{
+      if(idx===mid)return 'compare';
+      if(idx>=lo&&idx<=hi&&!done)return 'range';
+      return '';
+    });
+    renderCells(viz,arr,states);
+  }
+  function step(){
+    if(done)return;
+    const t=parseInt(target.value);
+    if(lo>hi){status.textContent='Not found.';done=true;draw();return;}
+    mid=Math.floor((lo+hi)/2);
+    if(arr[mid]===t){
+      const states=arr.map((_,idx)=>idx===mid?'found':'');
+      renderCells(viz,arr,states);
+      status.innerHTML=`Found <span class="hl">${t}</span> at index <span class="hl">${mid}</span>`;
+      done=true;confetti();return;
+    }
+    if(arr[mid]<t){status.innerHTML=`mid=${mid} (${arr[mid]}) < ${t} → go right`;lo=mid+1;}
+    else{status.innerHTML=`mid=${mid} (${arr[mid]}) > ${t} → go left`;hi=mid-1;}
+    draw();
+  }
+  function play(){
+    if(timer){clearInterval(timer);timer=null;$('bs-play').textContent='Play';return;}
+    $('bs-play').textContent='Pause';
+    timer=setInterval(()=>{if(done){clearInterval(timer);timer=null;$('bs-play').textContent='Play';return;}step();},parseInt(speed.value));
+  }
+  reset();
+  $('bs-rand').addEventListener('click',randomize);
+  $('bs-reset').addEventListener('click',reset);
+  $('bs-step').addEventListener('click',step);
+  $('bs-play').addEventListener('click',play);
+  addTeardown(()=>{if(timer)clearInterval(timer);});
+}
+
+// ===== PLAYGROUNDS: SORTING =====
+function sortPg(prefix,algo){
+  const viz=$(prefix+'-viz'),status=$(prefix+'-status'),speed=$(prefix+'-speed');
+  let arr=[],steps=[],idx=0,done=false,timer=null;
+  function gen(){return Array.from({length:12},()=>rand(5,99));}
+  function reset(){arr=[37,42,9,17,56,73,21,4,88,30,12,65];rebuild();}
+  function randomize(){arr=gen();rebuild();}
+  function rebuild(){steps=buildSteps(algo,[...arr]);idx=0;done=false;draw();status.textContent='Ready.';}
+  function draw(){
+    const s=steps[idx]||{arr,states:{}};
+    const states=Array(s.arr.length).fill('');
+    Object.entries(s.states||{}).forEach(([k,v])=>{states[+k]=v;});
+    renderBars(viz,s.arr,states);
+    if(s.msg)status.innerHTML=s.msg;
+  }
+  function step(){
+    if(done)return;
+    if(idx<steps.length-1){idx++;draw();}
+    else{done=true;status.innerHTML='<span class="hl">Sorted!</span>';confetti();}
+  }
+  function play(){
+    if(timer){clearInterval(timer);timer=null;$(prefix+'-play').textContent='Play';return;}
+    $(prefix+'-play').textContent='Pause';
+    timer=setInterval(()=>{if(done){clearInterval(timer);timer=null;$(prefix+'-play').textContent='Play';return;}step();},parseInt(speed.value));
+  }
+  reset();
+  $(prefix+'-rand').addEventListener('click',randomize);
+  $(prefix+'-reset').addEventListener('click',reset);
+  $(prefix+'-step').addEventListener('click',step);
+  $(prefix+'-play').addEventListener('click',play);
+  addTeardown(()=>{if(timer)clearInterval(timer);});
+}
+
+function buildSteps(algo,arr){
+  const steps=[{arr:[...arr],states:{},msg:'Initial array'}];
+  const sorted={};
+  function snap(states,msg){steps.push({arr:[...arr],states:{...sorted,...states},msg});}
+  if(algo==='selection'){
+    for(let i=0;i<arr.length-1;i++){
+      let m=i;
+      for(let j=i+1;j<arr.length;j++){
+        snap({[i]:'pivot',[m]:'compare',[j]:'compare'},`Comparing ${arr[j]} with current min ${arr[m]}`);
+        if(arr[j]<arr[m])m=j;
+      }
+      if(m!==i){[arr[i],arr[m]]=[arr[m],arr[i]];snap({[i]:'swap',[m]:'swap'},`Swapping ${arr[i]} and ${arr[m]}`);}
+      sorted[i]='sorted';
+    }
+    sorted[arr.length-1]='sorted';
+  } else if(algo==='insertion'){
+    for(let i=1;i<arr.length;i++){
+      let key=arr[i],j=i-1;
+      snap({[i]:'pivot'},`Inserting ${key}`);
+      while(j>=0&&arr[j]>key){
+        arr[j+1]=arr[j];
+        snap({[j]:'swap',[j+1]:'swap'},`Shifting ${arr[j+1]}`);
+        j--;
+      }
+      arr[j+1]=key;
+      snap({[j+1]:'compare'},`Placed ${key} at index ${j+1}`);
+    }
+    for(let i=0;i<arr.length;i++)sorted[i]='sorted';
+    snap({},'Sorted!');
+  } else if(algo==='bubble'){
+    let n=arr.length;
+    for(let i=0;i<n-1;i++){
+      let swapped=false;
+      for(let j=0;j<n-1-i;j++){
+        snap({[j]:'compare',[j+1]:'compare'},`Comparing ${arr[j]} and ${arr[j+1]}`);
+        if(arr[j]>arr[j+1]){
+          [arr[j],arr[j+1]]=[arr[j+1],arr[j]];
+          swapped=true;
+          snap({[j]:'swap',[j+1]:'swap'},`Swapped`);
+        }
+      }
+      sorted[n-1-i]='sorted';
+      if(!swapped){for(let k=0;k<n-1-i;k++)sorted[k]='sorted';break;}
+    }
+    sorted[0]='sorted';
+  } else if(algo==='merge'){
+    function ms(l,r){
+      if(l>=r)return;
+      const m=Math.floor((l+r)/2);
+      ms(l,m);ms(m+1,r);
+      const tmp=[];let i=l,j=m+1;
+      while(i<=m&&j<=r){
+        snap({[i]:'compare',[j]:'compare'},`Merging: comparing ${arr[i]} and ${arr[j]}`);
+        if(arr[i]<=arr[j])tmp.push(arr[i++]);else tmp.push(arr[j++]);
+      }
+      while(i<=m)tmp.push(arr[i++]);
+      while(j<=r)tmp.push(arr[j++]);
+      for(let k=0;k<tmp.length;k++)arr[l+k]=tmp[k];
+      const st={};for(let k=l;k<=r;k++)st[k]='swap';
+      snap(st,`Merged [${l}..${r}]`);
+    }
+    ms(0,arr.length-1);
+    for(let i=0;i<arr.length;i++)sorted[i]='sorted';
+    snap({},'Sorted!');
+  } else if(algo==='quick'){
+    function qs(lo,hi){
+      if(lo>=hi){if(lo===hi)sorted[lo]='sorted';return;}
+      const pivot=arr[hi];let i=lo-1;
+      snap({[hi]:'pivot'},`Pivot = ${pivot}`);
+      for(let j=lo;j<hi;j++){
+        snap({[hi]:'pivot',[j]:'compare'},`Compare ${arr[j]} vs pivot ${pivot}`);
+        if(arr[j]<=pivot){
+          i++;
+          if(i!==j){[arr[i],arr[j]]=[arr[j],arr[i]];snap({[hi]:'pivot',[i]:'swap',[j]:'swap'},`Swap`);}
+        }
+      }
+      [arr[i+1],arr[hi]]=[arr[hi],arr[i+1]];
+      snap({[i+1]:'swap'},`Pivot placed at ${i+1}`);
+      sorted[i+1]='sorted';
+      qs(lo,i);qs(i+2,hi);
+    }
+    qs(0,arr.length-1);
+  } else if(algo==='heap'){
+    let n=arr.length;
+    function heapify(n,i){
+      let lg=i,l=2*i+1,r=2*i+2;
+      if(l<n&&arr[l]>arr[lg])lg=l;
+      if(r<n&&arr[r]>arr[lg])lg=r;
+      if(lg!==i){
+        [arr[i],arr[lg]]=[arr[lg],arr[i]];
+        snap({[i]:'swap',[lg]:'swap'},`Heapify swap`);
+        heapify(n,lg);
+      }
+    }
+    for(let i=Math.floor(n/2)-1;i>=0;i--)heapify(n,i);
+    snap({},'Max-heap built');
+    for(let i=n-1;i>0;i--){
+      [arr[0],arr[i]]=[arr[i],arr[0]];
+      snap({[0]:'swap',[i]:'swap'},`Extract max → ${i}`);
+      sorted[i]='sorted';
+      heapify(i,0);
+    }
+    sorted[0]='sorted';
+  }
+  snap({},'<span class="hl">Sorted!</span>');
+  return steps;
+}
+</script>
+<script>
+// ===== RENDERERS: LINEAR DATA STRUCTURES =====
+RENDERERS.arrays=()=>header('Arrays','Contiguous, fixed-size, O(1) random access')+
+ expl(`<p>An <strong>array</strong> stores elements in <strong>contiguous memory</strong>. Given the base address and an index, the address of <code>a[i]</code> is computed as <code>base + i * sizeof(T)</code> — that's why access is <strong>O(1)</strong>.</p>
+  <p>Trade-off: insertion/deletion in the middle is O(n) because subsequent elements must shift. The size is fixed at allocation time (use <code>std::vector</code> for a growable array).</p>`)+
+ codeBlock(`#include <iostream>
+#include <vector>
+using namespace std;
+
+int main() {
+    // FIXED-SIZE C-style array — size baked in at compile time.
+    int a[5] = {10, 20, 30, 40, 50};
+    cout << a[2] << endl;              // O(1) — address(a[2]) = address(a) + 2*sizeof(int)
+                                       // The CPU computes the address directly, no looping.
+
+    // DYNAMIC array (std::vector) — grows automatically. Internally it
+    // holds a heap-allocated buffer; when it fills up, vector allocates a
+    // bigger buffer (usually 2x) and copies elements over.
+    vector<int> v = {1, 2, 3};
+    v.push_back(4);                    // append → AMORTIZED O(1).
+                                       // Most pushes are O(1); occasional ones trigger a resize
+                                       // (O(n)), but the cost averages out to O(1) per push.
+    v.insert(v.begin() + 1, 99);       // insert at index 1 → O(n).
+                                       // Why? Every element at index ≥1 must shift right by 1.
+    for (int x : v) cout << x << " ";  // prints: 1 99 2 3 4
+    return 0;
+}`)+
+ cxCard('O(1)','O(n)','O(n)','O(n)',35)+
+ playground(`<div class="diagram"><svg viewBox="0 0 600 200" class="viz-svg" style="max-height:220px">
+   ${[10,20,30,40,50,60].map((v,i)=>`
+     <rect x="${30+i*90}" y="60" width="80" height="60" fill="rgba(0,229,255,0.05)" stroke="#00e5ff" rx="6"/>
+     <text x="${70+i*90}" y="95" fill="#e6edf3" font-size="18" text-anchor="middle" font-family="monospace">${v}</text>
+     <text x="${70+i*90}" y="140" fill="#8b949e" font-size="12" text-anchor="middle">[${i}]</text>
+     <text x="${70+i*90}" y="40" fill="#b000ff" font-size="10" text-anchor="middle" font-family="monospace">0x${(1000+i*4).toString(16)}</text>
+   `).join('')}
+   <text x="300" y="180" fill="#8b949e" font-size="12" text-anchor="middle">Contiguous memory — address(a[i]) = base + i × sizeof(int)</text>
+  </svg></div>`);
+
+RENDERERS['singly-ll']=()=>header('Singly Linked List','Nodes with a value and a pointer to the next node')+
+ expl(`<p>A <strong>singly linked list</strong> stores each element in a heap-allocated <strong>node</strong> containing the value and a pointer to the next node. The list keeps a <strong>head</strong> pointer.</p>
+  <p>Insertion at head is O(1). Insertion at tail or by index is O(n) because we must walk the list. No random access — to reach the k-th element you traverse k nodes.</p>`)+
+ codeBlock(`#include <iostream>
+using namespace std;
+
+// A single link in the chain — value + pointer to the next link.
+// 'Node(int d) : data(d), next(nullptr) {}' is a member-initializer
+// constructor: sets data = d and next = nullptr (no next link yet).
+struct Node {
+    int data;
+    Node* next;
+    Node(int d) : data(d), next(nullptr) {}
+};
+
+class SLL {
+public:
+    Node* head = nullptr;                    // 'head' points to the first node; nullptr = empty list
+
+    // Insert at the front — only 2 pointer assignments → O(1).
+    void insertHead(int v) {
+        Node* n = new Node(v);               // allocate a node on the heap
+        n->next = head;                      // new node points to the old first node
+        head = n;                            // new node becomes the head
+    }
+
+    // Insert at the back — must walk to the last node → O(n).
+    void insertTail(int v) {
+        Node* n = new Node(v);
+        if (!head) { head = n; return; }     // empty list: new node is both head and tail
+        Node* cur = head;
+        while (cur->next) cur = cur->next;   // walk until cur is the last node
+        cur->next = n;                       // append
+    }
+
+    // Remove the first node with data == v → O(n).
+    bool remove(int v) {
+        if (!head) return false;             // empty list
+        if (head->data == v) {               // special case: deleting the head
+            Node* t = head;
+            head = head->next;
+            delete t;                        // free the memory we 'new'-ed earlier
+            return true;
+        }
+        Node* cur = head;
+        while (cur->next && cur->next->data != v) cur = cur->next;  // find node BEFORE the target
+        if (!cur->next) return false;        // walked off the end → value not present
+        Node* t = cur->next;
+        cur->next = t->next;                 // skip the target
+        delete t;
+        return true;
+    }
+
+    void print() {
+        for (Node* c = head; c; c = c->next) // 'c' as condition: nullptr is falsy → stops at end
+            cout << c->data << " -> ";
+        cout << "NULL\\n";
+    }
+};
+
+int main() {
+    SLL list;
+    list.insertTail(1); list.insertTail(2); list.insertHead(0);
+    list.print();                            // 0 -> 1 -> 2 -> NULL
+    list.remove(1); list.print();            // 0 -> 2 -> NULL
+    return 0;
+}`)+
+ cxCard('O(1)','O(n)','O(n)','O(n)',45)+
+ playground(`<div class="controls">
+   <input class="input" id="sll-val" type="number" placeholder="value" value="5">
+   <button class="btn" id="sll-ih">Insert Head</button>
+   <button class="btn" id="sll-it">Insert Tail</button>
+   <button class="btn" id="sll-rm">Delete</button>
+   <button class="btn" id="sll-find">Search</button>
+   <button class="btn" id="sll-reset">Reset</button>
+  </div>
+  <div class="viz" id="sll-viz" style="align-items:center;min-height:120px"></div>
+  <div class="status" id="sll-status" aria-live="polite">Use the buttons above.</div>`);
+INITS['singly-ll']=()=>llPg('sll',false);
+
+RENDERERS['doubly-ll']=()=>header('Doubly Linked List','Each node has prev and next pointers — bidirectional traversal')+
+ expl(`<p>A <strong>doubly linked list</strong> adds a <strong>prev</strong> pointer to each node. This enables O(1) deletion when you already have a pointer to the node, and reverse traversal.</p>
+  <p>Trade-off: extra pointer per node (more memory) and more pointer updates per insert/delete.</p>`)+
+ codeBlock(`#include <iostream>
+using namespace std;
+
+// Each node now has TWO pointers: 'prev' (previous node) and 'next'.
+// This lets us walk backward as well as forward, and delete a known
+// node in O(1) without needing its predecessor.
+struct Node {
+    int data;
+    Node *prev, *next;
+    Node(int d) : data(d), prev(nullptr), next(nullptr) {}
+};
+
+class DLL {
+public:
+    Node *head = nullptr, *tail = nullptr;   // keep BOTH ends → O(1) insert at either end
+
+    // Append to tail — O(1) because we cached 'tail'.
+    void insertTail(int v) {
+        Node* n = new Node(v);
+        if (!tail) { head = tail = n; return; }  // empty list
+        n->prev = tail;                          // new node looks back at old tail
+        tail->next = n;                          // old tail looks forward to new node
+        tail = n;                                // update tail pointer
+    }
+
+    void insertHead(int v) {
+        Node* n = new Node(v);
+        if (!head) { head = tail = n; return; }
+        n->next = head;
+        head->prev = n;
+        head = n;
+    }
+
+    // Delete the first node with data == v — O(n) due to search.
+    // Once located, the unlink itself is O(1).
+    bool remove(int v) {
+        Node* c = head;
+        while (c && c->data != v) c = c->next;   // find target
+        if (!c) return false;                    // not found
+        // Rewire neighbors to skip 'c'. Handle endpoints with care:
+        if (c->prev) c->prev->next = c->next; else head = c->next;  // c was the head?
+        if (c->next) c->next->prev = c->prev; else tail = c->prev;  // c was the tail?
+        delete c;
+        return true;
+    }
+
+    void printForward() {
+        for (Node* c = head; c; c = c->next) cout << c->data << " <-> ";
+        cout << "NULL\\n";
+    }
+};
+
+int main() {
+    DLL d; d.insertTail(1); d.insertTail(2); d.insertHead(0);
+    d.printForward();   // 0 <-> 1 <-> 2 <-> NULL
+    return 0;
+}`)+
+ cxCard('O(1)','O(n)','O(n)','O(n)',50)+
+ playground(`<div class="controls">
+   <input class="input" id="dll-val" type="number" placeholder="value" value="5">
+   <button class="btn" id="dll-ih">Insert Head</button>
+   <button class="btn" id="dll-it">Insert Tail</button>
+   <button class="btn" id="dll-rm">Delete</button>
+   <button class="btn" id="dll-find">Search</button>
+   <button class="btn" id="dll-reset">Reset</button>
+  </div>
+  <div class="viz" id="dll-viz" style="align-items:center;min-height:120px"></div>
+  <div class="status" id="dll-status" aria-live="polite">Use the buttons above.</div>`);
+INITS['doubly-ll']=()=>llPg('dll',true);
+
+RENDERERS.stack=()=>header('Stack','LIFO — Last In, First Out')+
+ expl(`<p>A <strong>Stack</strong> supports push (add to top), pop (remove from top), and top/peek — all in O(1). It's used for function calls, expression evaluation, undo systems, and DFS.</p>
+  <p>Two common implementations: <strong>array-based</strong> (fast, fixed capacity unless resized) and <strong>linked-list-based</strong> (unbounded, one allocation per push).</p>`)+
+ codeBlock(`#include <iostream>
+#include <vector>
+using namespace std;
+
+// =====================================================================
+// IMPLEMENTATION #1 — Array-based stack (backed by std::vector).
+// The TOP of the stack is the BACK of the vector — that's where
+// push_back and pop_back are O(1).
+// =====================================================================
+class Stack {
+    vector<int> data;                              // underlying storage
+public:
+    void push(int x) { data.push_back(x); }        // append → O(1) amortized
+    void pop()       { if (!data.empty()) data.pop_back(); }  // remove last
+    int  top() const { return data.back(); }       // peek without removing
+    bool empty() const { return data.empty(); }
+    int  size() const  { return data.size(); }
+};
+
+// =====================================================================
+// IMPLEMENTATION #2 — Linked-list-based stack.
+// The TOP is the HEAD of the list — push and pop happen there in O(1).
+// =====================================================================
+struct Node { int v; Node* next; };
+
+class LLStack {
+    Node* head = nullptr;                          // head = top of the stack
+public:
+    void push(int x) {
+        Node* n = new Node{x, head};               // brace-init: {value, next}
+        head = n;                                  // new node becomes the new top
+    }
+    void pop() {
+        if (head) {
+            Node* t = head;
+            head = head->next;                     // pop: head jumps to the next node
+            delete t;                              // free the old top
+        }
+    }
+    int  top() const   { return head->v; }
+    bool empty() const { return head == nullptr; }
+};
+
+int main() {
+    Stack s;
+    s.push(10); s.push(20); s.push(30);   // stack (bottom→top): 10, 20, 30
+    cout << s.top() << endl;              // 30
+    s.pop();                              // remove 30
+    cout << s.top();                      // 20
+    return 0;
+}`)+
+ cxCard('O(1)','O(1)','O(1)','O(n)',15)+
+ playground(`<div class="controls">
+   <input class="input" id="st-val" type="number" placeholder="value" value="5">
+   <button class="btn" id="st-push">Push</button>
+   <button class="btn" id="st-pop">Pop</button>
+   <button class="btn" id="st-peek">Peek</button>
+   <button class="btn" id="st-reset">Reset</button>
+  </div>
+  <div class="viz" id="st-viz" style="min-height:240px;align-items:flex-end"></div>
+  <div class="status" id="st-status" aria-live="polite">Stack is empty.</div>`);
+INITS.stack=()=>stackPg();
+
+RENDERERS.queue=()=>header('Queue','FIFO — First In, First Out')+
+ expl(`<p>A <strong>Queue</strong> supports enqueue (add to back), dequeue (remove from front), and front/peek — all in O(1) with the right implementation. Used in BFS, scheduling, buffering.</p>
+  <p><strong>Array-based</strong> queues use a circular buffer to avoid shifting elements. <strong>Linked-list-based</strong> queues keep head and tail pointers.</p>`)+
+ codeBlock(`#include <iostream>
+#include <vector>
+using namespace std;
+
+// Linked-list queue: enqueue at TAIL, dequeue from HEAD — both O(1)
+// because we cache both pointers.
+struct Node { int v; Node* next; };
+
+class Queue {
+    Node *head = nullptr, *tail = nullptr;     // head = front (oldest), tail = back (newest)
+public:
+    // Add to the back of the queue → O(1).
+    void enqueue(int x) {
+        Node* n = new Node{x, nullptr};        // new node has no successor yet
+        if (!tail)                             // empty queue?
+            head = tail = n;                   // node becomes both ends
+        else {
+            tail->next = n;                    // link old tail to new node
+            tail = n;                          // new node is the new tail
+        }
+    }
+
+    // Remove from the front → O(1).
+    void dequeue() {
+        if (!head) return;                     // empty: nothing to do
+        Node* t = head;
+        head = head->next;                     // front moves forward
+        if (!head) tail = nullptr;             // queue became empty → reset tail too
+        delete t;                              // release the old front
+    }
+
+    int  front() const { return head->v; }     // peek at the oldest element
+    bool empty() const { return head == nullptr; }
+};
+
+int main() {
+    Queue q;
+    q.enqueue(10); q.enqueue(20); q.enqueue(30);   // queue (front→back): 10, 20, 30
+    cout << q.front() << endl;          // 10 (FIFO — first in is first out)
+    q.dequeue();                        // removes 10
+    cout << q.front();                  // 20
+    return 0;
+}`)+
+ cxCard('O(1)','O(1)','O(1)','O(n)',15)+
+ playground(`<div class="controls">
+   <input class="input" id="qu-val" type="number" placeholder="value" value="5">
+   <button class="btn" id="qu-en">Enqueue</button>
+   <button class="btn" id="qu-de">Dequeue</button>
+   <button class="btn" id="qu-peek">Front</button>
+   <button class="btn" id="qu-reset">Reset</button>
+  </div>
+  <div class="viz" id="qu-viz" style="min-height:120px;align-items:center"></div>
+  <div class="status" id="qu-status" aria-live="polite">Queue is empty.</div>`);
+INITS.queue=()=>queuePg();
+
+RENDERERS['priority-queue']=()=>header('Priority Queue','Each element has a priority; highest priority comes out first')+
+ expl(`<p>A <strong>Priority Queue</strong> is an ADT where elements are removed by priority, not insertion order. Typically implemented with a <strong>binary heap</strong> for O(log n) insert and extract.</p>
+  <p>C++ ships <code>std::priority_queue&lt;T&gt;</code> as a max-heap by default. Use cases: Dijkstra, A*, scheduling, Huffman coding.</p>`)+
+ codeBlock(`#include <iostream>
+#include <queue>      // brings in std::priority_queue
+#include <vector>
+using namespace std;
+
+int main() {
+    // ---------------------------------------------------------------
+    // MAX-HEAP — biggest value is always at the top. This is the
+    // DEFAULT behavior of std::priority_queue.
+    // ---------------------------------------------------------------
+    priority_queue<int> pq;
+    pq.push(5); pq.push(1); pq.push(8); pq.push(3);  // each push is O(log n)
+    while (!pq.empty()) {
+        cout << pq.top() << " ";    // 'top()' is O(1) — peek at the max
+        pq.pop();                   // remove the max — O(log n)
+    }
+    cout << endl;                   // prints: 8 5 3 1  (descending order)
+
+    // ---------------------------------------------------------------
+    // MIN-HEAP — smallest at the top. We override the comparator.
+    // Template params: <T, Container, Compare>
+    //   - T:         element type
+    //   - Container: storage type (vector is standard)
+    //   - Compare:   greater<T> flips the default 'less<T>' → min-heap
+    // ---------------------------------------------------------------
+    priority_queue<int, vector<int>, greater<int>> minpq;
+    minpq.push(5); minpq.push(1); minpq.push(8);
+    cout << minpq.top();            // 1 — the SMALLEST value
+    return 0;
+}`)+
+ cxCard('O(log n)','O(log n)','O(log n)','O(n)',40)+
+ playground(`<div class="diagram"><svg viewBox="0 0 600 280" class="viz-svg" style="max-height:300px">
+   <text x="300" y="20" fill="#00e5ff" font-size="14" text-anchor="middle" font-weight="600">Max-Heap (binary-heap backing for Priority Queue)</text>
+   <line x1="300" y1="70" x2="200" y2="130" class="tree-edge"/>
+   <line x1="300" y1="70" x2="400" y2="130" class="tree-edge"/>
+   <line x1="200" y1="130" x2="140" y2="190" class="tree-edge"/>
+   <line x1="200" y1="130" x2="260" y2="190" class="tree-edge"/>
+   <line x1="400" y1="130" x2="340" y2="190" class="tree-edge"/>
+   <line x1="400" y1="130" x2="460" y2="190" class="tree-edge"/>
+   <g class="tree-node"><circle cx="300" cy="70" r="25"/><text x="300" y="70">50</text></g>
+   <g class="tree-node"><circle cx="200" cy="130" r="22"/><text x="200" y="130">30</text></g>
+   <g class="tree-node"><circle cx="400" cy="130" r="22"/><text x="400" y="130">40</text></g>
+   <g class="tree-node"><circle cx="140" cy="190" r="20"/><text x="140" y="190">10</text></g>
+   <g class="tree-node"><circle cx="260" cy="190" r="20"/><text x="260" y="190">20</text></g>
+   <g class="tree-node"><circle cx="340" cy="190" r="20"/><text x="340" y="190">25</text></g>
+   <g class="tree-node"><circle cx="460" cy="190" r="20"/><text x="460" y="190">15</text></g>
+   <text x="300" y="245" fill="#8b949e" font-size="12" text-anchor="middle">Insert: add at end then sift up — O(log n)</text>
+   <text x="300" y="265" fill="#8b949e" font-size="12" text-anchor="middle">Extract-max: swap root with last, shrink, sift down — O(log n)</text>
+  </svg></div>`);
+</script>
+<script>
+// ===== PLAYGROUNDS: LL / STACK / QUEUE =====
+function llPg(prefix,doubly){
+  const viz=$(prefix+'-viz'),status=$(prefix+'-status'),val=$(prefix+'-val');
+  let list=[10,20,30];
+  function draw(hl,hlPink){
+    const sep=doubly?'⇄':'→';
+    viz.innerHTML='<div class="ll-row">HEAD '+
+     (list.length===0?'<span class="ll-arrow">→ NULL</span>':
+      list.map((v,i)=>{
+        const cls=i===hl?'ll-box hl':(i===hlPink?'ll-box hl-pink':'ll-box');
+        return `<div class="ll-node"><div class="${cls}">${v}</div><span class="ll-arrow">${sep}</span></div>`;
+      }).join('')+'<span style="color:var(--text-dim)">NULL</span>')+'</div>';
+  }
+  draw();
+  $(prefix+'-ih').addEventListener('click',()=>{const v=parseInt(val.value);if(isNaN(v))return;list.unshift(v);draw(0);status.innerHTML=`Inserted <span class="hl">${v}</span> at head`;});
+  $(prefix+'-it').addEventListener('click',()=>{const v=parseInt(val.value);if(isNaN(v))return;list.push(v);draw(list.length-1);status.innerHTML=`Inserted <span class="hl">${v}</span> at tail`;});
+  $(prefix+'-rm').addEventListener('click',()=>{
+    const v=parseInt(val.value);const i=list.indexOf(v);
+    if(i<0){status.textContent=`Value ${v} not found`;return;}
+    draw(-1,i);
+    setTimeout(()=>{list.splice(i,1);draw();status.innerHTML=`Deleted <span class="hl">${v}</span>`;},400);
+  });
+  $(prefix+'-find').addEventListener('click',async()=>{
+    const v=parseInt(val.value);
+    for(let i=0;i<list.length;i++){
+      draw(i);status.innerHTML=`Checking index ${i}: ${list[i]}`;
+      await sleep(400);
+      if(list[i]===v){draw(-1,i);status.innerHTML=`Found <span class="hl">${v}</span> at index ${i}`;confetti();return;}
+    }
+    draw();status.textContent=`${v} not found`;
+  });
+  $(prefix+'-reset').addEventListener('click',()=>{list=[10,20,30];draw();status.textContent='Reset.';});
+}
+
+function stackPg(){
+  const viz=$('st-viz'),status=$('st-status'),val=$('st-val');
+  let stack=[];
+  function draw(hl){
+    viz.innerHTML='<div class="stack-vbox">'+
+     (stack.length===0?'<span style="color:var(--text-dim)">empty</span>':
+      stack.map((v,i)=>{
+        const isTop=i===stack.length-1;
+        return `<div class="stack-cell ${isTop?'top':''}" style="${hl===i?'background:var(--accent-pink);color:#fff':''}">${v}${isTop?' ← top':''}</div>`;
+      }).join(''))+'</div>';
+  }
+  draw();
+  $('st-push').addEventListener('click',()=>{const v=parseInt(val.value);if(isNaN(v))return;stack.push(v);draw(stack.length-1);status.innerHTML=`Pushed <span class="hl">${v}</span>`;});
+  $('st-pop').addEventListener('click',()=>{if(stack.length===0){status.textContent='Stack underflow!';return;}const v=stack.pop();draw();status.innerHTML=`Popped <span class="hl">${v}</span>`;});
+  $('st-peek').addEventListener('click',()=>{if(stack.length===0){status.textContent='Empty.';return;}draw(stack.length-1);status.innerHTML=`Top = <span class="hl">${stack[stack.length-1]}</span>`;});
+  $('st-reset').addEventListener('click',()=>{stack=[];draw();status.textContent='Reset.';});
+}
+
+function queuePg(){
+  const viz=$('qu-viz'),status=$('qu-status'),val=$('qu-val');
+  let q=[];
+  function draw(hl){
+    viz.innerHTML='<div class="queue-hbox"><span style="color:var(--text-dim)">FRONT →</span>'+
+     (q.length===0?'<span style="color:var(--text-dim)">empty</span>':
+      q.map((v,i)=>{
+        const c=i===0?'front':(i===q.length-1?'back':'');
+        return `<div class="queue-cell ${c}" style="${hl===i?'background:var(--accent-pink);color:#fff':''}">${v}</div>`;
+      }).join(''))+'<span style="color:var(--text-dim)">← BACK</span></div>';
+  }
+  draw();
+  $('qu-en').addEventListener('click',()=>{const v=parseInt(val.value);if(isNaN(v))return;q.push(v);draw(q.length-1);status.innerHTML=`Enqueued <span class="hl">${v}</span>`;});
+  $('qu-de').addEventListener('click',()=>{if(q.length===0){status.textContent='Queue is empty!';return;}const v=q.shift();draw();status.innerHTML=`Dequeued <span class="hl">${v}</span>`;});
+  $('qu-peek').addEventListener('click',()=>{if(q.length===0){status.textContent='Empty.';return;}draw(0);status.innerHTML=`Front = <span class="hl">${q[0]}</span>`;});
+  $('qu-reset').addEventListener('click',()=>{q=[];draw();status.textContent='Reset.';});
+}
+</script>
+<script>
+// ===== RENDERERS: NON-LINEAR =====
+RENDERERS['binary-trees']=()=>header('Binary Trees','Full, Complete, Perfect — three shape definitions')+
+ expl(`<p>A <strong>binary tree</strong> is a tree where every node has at most two children (left and right). Three special shapes:</p>
+  <p><strong>Full</strong>: every node has 0 or 2 children (no node with one child). <strong>Complete</strong>: all levels filled except possibly the last, which is filled left-to-right. <strong>Perfect</strong>: all internal nodes have two children AND all leaves are at the same depth.</p>`)+
+ codeBlock(`#include <iostream>
+using namespace std;
+
+// A binary-tree node has a value and AT MOST two children.
+struct Node {
+    int data;
+    Node *left, *right;
+    Node(int d) : data(d), left(nullptr), right(nullptr) {}
+};
+
+// HEIGHT = number of edges on the longest root-to-leaf path.
+// Convention here: empty tree has height 0, a single node has height 1.
+int height(Node* root) {
+    if (!root) return 0;                              // BASE: empty subtree
+    return 1 + max(height(root->left),                // 1 (this node) +
+                   height(root->right));              //   taller of the two children
+}
+
+// Count every node in the tree → visits each once → O(n).
+int countNodes(Node* root) {
+    if (!root) return 0;
+    return 1 + countNodes(root->left) + countNodes(root->right);
+    //     ^------ this node ------^ left subtree ^ right subtree
+}
+
+int main() {
+    // Build:        1
+    //              / \\
+    //             2   3
+    //            / \\
+    //           4   5
+    Node* root = new Node(1);
+    root->left = new Node(2); root->right = new Node(3);
+    root->left->left = new Node(4); root->left->right = new Node(5);
+    cout << "height=" << height(root)               // 3
+         << " nodes="  << countNodes(root);         // 5
+    return 0;
+}`)+
+ cxCard('O(1)','O(n)','O(n)','O(n)',30)+
+ playground(`<div class="diagram"><svg viewBox="0 0 700 260" class="viz-svg" style="max-height:280px">
+   <text x="110" y="20" fill="#00e5ff" font-size="14" text-anchor="middle" font-weight="600">Full</text>
+   <line x1="110" y1="50" x2="70" y2="100" class="tree-edge"/><line x1="110" y1="50" x2="150" y2="100" class="tree-edge"/>
+   <line x1="70" y1="100" x2="40" y2="150" class="tree-edge"/><line x1="70" y1="100" x2="100" y2="150" class="tree-edge"/>
+   <g class="tree-node"><circle cx="110" cy="50" r="18"/><text x="110" y="50">A</text></g>
+   <g class="tree-node"><circle cx="70" cy="100" r="18"/><text x="70" y="100">B</text></g>
+   <g class="tree-node"><circle cx="150" cy="100" r="18"/><text x="150" y="100">C</text></g>
+   <g class="tree-node"><circle cx="40" cy="150" r="18"/><text x="40" y="150">D</text></g>
+   <g class="tree-node"><circle cx="100" cy="150" r="18"/><text x="100" y="150">E</text></g>
+   <text x="110" y="220" fill="#8b949e" font-size="11" text-anchor="middle">Each node has 0 or 2 children</text>
+
+   <text x="350" y="20" fill="#00e5ff" font-size="14" text-anchor="middle" font-weight="600">Complete</text>
+   <line x1="350" y1="50" x2="310" y2="100" class="tree-edge"/><line x1="350" y1="50" x2="390" y2="100" class="tree-edge"/>
+   <line x1="310" y1="100" x2="280" y2="150" class="tree-edge"/><line x1="310" y1="100" x2="340" y2="150" class="tree-edge"/>
+   <line x1="390" y1="100" x2="370" y2="150" class="tree-edge"/>
+   <g class="tree-node"><circle cx="350" cy="50" r="18"/><text x="350" y="50">A</text></g>
+   <g class="tree-node"><circle cx="310" cy="100" r="18"/><text x="310" y="100">B</text></g>
+   <g class="tree-node"><circle cx="390" cy="100" r="18"/><text x="390" y="100">C</text></g>
+   <g class="tree-node"><circle cx="280" cy="150" r="18"/><text x="280" y="150">D</text></g>
+   <g class="tree-node"><circle cx="340" cy="150" r="18"/><text x="340" y="150">E</text></g>
+   <g class="tree-node"><circle cx="370" cy="150" r="18"/><text x="370" y="150">F</text></g>
+   <text x="350" y="220" fill="#8b949e" font-size="11" text-anchor="middle">Filled left-to-right at last level</text>
+
+   <text x="590" y="20" fill="#00e5ff" font-size="14" text-anchor="middle" font-weight="600">Perfect</text>
+   <line x1="590" y1="50" x2="550" y2="100" class="tree-edge"/><line x1="590" y1="50" x2="630" y2="100" class="tree-edge"/>
+   <line x1="550" y1="100" x2="520" y2="150" class="tree-edge"/><line x1="550" y1="100" x2="580" y2="150" class="tree-edge"/>
+   <line x1="630" y1="100" x2="610" y2="150" class="tree-edge"/><line x1="630" y1="100" x2="660" y2="150" class="tree-edge"/>
+   <g class="tree-node"><circle cx="590" cy="50" r="18"/><text x="590" y="50">A</text></g>
+   <g class="tree-node"><circle cx="550" cy="100" r="18"/><text x="550" y="100">B</text></g>
+   <g class="tree-node"><circle cx="630" cy="100" r="18"/><text x="630" y="100">C</text></g>
+   <g class="tree-node"><circle cx="520" cy="150" r="18"/><text x="520" y="150">D</text></g>
+   <g class="tree-node"><circle cx="580" cy="150" r="18"/><text x="580" y="150">E</text></g>
+   <g class="tree-node"><circle cx="610" cy="150" r="18"/><text x="610" y="150">F</text></g>
+   <g class="tree-node"><circle cx="660" cy="150" r="18"/><text x="660" y="150">G</text></g>
+   <text x="590" y="220" fill="#8b949e" font-size="11" text-anchor="middle">All levels completely filled</text>
+  </svg></div>`);
+
+RENDERERS.bst=()=>header('Binary Search Tree','For every node: left subtree < node < right subtree')+
+ expl(`<p>A <strong>Binary Search Tree (BST)</strong> maintains the invariant: for every node, all values in the left subtree are smaller and all values in the right subtree are larger.</p>
+  <p>Search, insert, and delete are O(h) where h is the height — O(log n) for a balanced tree, O(n) for a degenerate one (insert sorted data → linked list).</p>
+  <p>Delete has three cases: leaf (just remove), one child (splice it in), two children (replace with in-order successor).</p>`)+
+ codeBlock(`#include <iostream>
+using namespace std;
+
+struct Node { int v; Node *l, *r; Node(int x):v(x),l(nullptr),r(nullptr){} };
+
+// INSERT — walk down using the BST property, then attach a new leaf.
+// Returns the (possibly new) subtree root so the caller can re-link.
+Node* insert(Node* root, int x) {
+    if (!root) return new Node(x);                  // empty spot → create the new leaf here
+    if      (x < root->v) root->l = insert(root->l, x);  // x belongs in the LEFT subtree
+    else if (x > root->v) root->r = insert(root->r, x);  // x belongs in the RIGHT subtree
+    // (x == root->v: do nothing — duplicates ignored)
+    return root;
+}
+
+// SEARCH — at each step go left if smaller, right if larger.
+// Each comparison eliminates half the tree (when balanced) → O(log n).
+bool search(Node* root, int x) {
+    if (!root) return false;                        // hit a dead end → not present
+    if (root->v == x) return true;                  // found!
+    return x < root->v ? search(root->l, x)         // ternary: ? if-true : if-false
+                       : search(root->r, x);
+}
+
+// Helper: find the smallest value in a subtree (leftmost node).
+Node* minNode(Node* r) { while (r->l) r = r->l; return r; }
+
+// DELETE — the trickiest BST operation. Three cases:
+//   1) Node has NO children       → just remove it.
+//   2) Node has ONE child         → replace it with that child.
+//   3) Node has TWO children      → replace its value with the IN-ORDER SUCCESSOR
+//                                   (smallest value in the right subtree), then delete that successor.
+Node* remove(Node* root, int x) {
+    if (!root) return nullptr;
+    if      (x < root->v) root->l = remove(root->l, x);
+    else if (x > root->v) root->r = remove(root->r, x);
+    else {                                          // found the node to delete
+        if (!root->l) { Node* r = root->r; delete root; return r; }   // case 1 or 2 (no left)
+        if (!root->r) { Node* l = root->l; delete root; return l; }   // case 1 or 2 (no right)
+        // Case 3: both children present.
+        Node* succ = minNode(root->r);              // in-order successor
+        root->v = succ->v;                          // copy its value up
+        root->r = remove(root->r, succ->v);         // and delete the successor (now a duplicate)
+    }
+    return root;
+}
+
+int main() {
+    Node* root = nullptr;
+    for (int x : {50, 30, 70, 20, 40, 60, 80}) root = insert(root, x);
+    cout << search(root, 40) << endl;               // 1 (true)
+    root = remove(root, 30);                        // 30 has two children → replaced by 40
+    return 0;
+}`)+
+ cxCard('O(log n)','O(log n)','O(n)','O(n)',40)+
+ playground(`<div class="controls">
+   <input class="input" id="bst-val" type="number" placeholder="value" value="25">
+   <button class="btn" id="bst-ins">Insert</button>
+   <button class="btn" id="bst-find">Search</button>
+   <button class="btn" id="bst-rm">Delete</button>
+   <button class="btn" id="bst-reset">Reset</button>
+  </div>
+  <div class="viz" id="bst-viz" style="min-height:280px;align-items:center"><svg viewBox="0 0 700 280" class="viz-svg"></svg></div>
+  <div class="status" id="bst-status" aria-live="polite">Sample BST loaded.</div>`);
+INITS.bst=()=>bstPg();
+
+RENDERERS['tree-traversals']=()=>header('Tree Traversals','Preorder, Inorder, Postorder, BFS')+
+ expl(`<p>Four ways to visit every node in a tree:</p>
+  <p><strong>Preorder</strong> (Root, Left, Right) — used to copy a tree. <strong>Inorder</strong> (Left, Root, Right) — on a BST gives sorted order. <strong>Postorder</strong> (Left, Right, Root) — used to delete a tree. <strong>BFS / Level-order</strong> — visit by depth using a queue.</p>`)+
+ codeBlock(`#include <iostream>
+#include <queue>           // for BFS
+using namespace std;
+
+struct Node { int v; Node *l, *r; Node(int x):v(x),l(nullptr),r(nullptr){} };
+
+// PREORDER — Root, Left, Right. Useful for COPYING a tree or
+// serializing it (the first value seen is always the root).
+void preorder(Node* n)  {
+    if (!n) return;             // base case
+    cout << n->v << " ";        // 1. visit ROOT
+    preorder(n->l);             // 2. recurse LEFT
+    preorder(n->r);             // 3. recurse RIGHT
+}
+
+// INORDER — Left, Root, Right. On a BST this yields elements in
+// SORTED ascending order — a very useful property.
+void inorder(Node* n)   {
+    if (!n) return;
+    inorder(n->l);              // 1. LEFT
+    cout << n->v << " ";        // 2. ROOT
+    inorder(n->r);              // 3. RIGHT
+}
+
+// POSTORDER — Left, Right, Root. Useful for DELETING a tree
+// (free children before parent) or evaluating expression trees.
+void postorder(Node* n) {
+    if (!n) return;
+    postorder(n->l);            // 1. LEFT
+    postorder(n->r);            // 2. RIGHT
+    cout << n->v << " ";        // 3. ROOT
+}
+
+// BFS / LEVEL-ORDER — visit nodes by depth (level 0, then 1, then 2…).
+// Uses an iterative QUEUE instead of recursion.
+void bfs(Node* root) {
+    if (!root) return;
+    queue<Node*> q;
+    q.push(root);                       // start with the root
+    while (!q.empty()) {
+        Node* n = q.front(); q.pop();   // take the next node
+        cout << n->v << " ";
+        if (n->l) q.push(n->l);         // enqueue children (left first)
+        if (n->r) q.push(n->r);
+    }
+}
+
+int main() {
+    // Tree:        1
+    //             / \\
+    //            2   3
+    //           / \\
+    //          4   5
+    Node* r = new Node(1);
+    r->l = new Node(2); r->r = new Node(3);
+    r->l->l = new Node(4); r->l->r = new Node(5);
+    preorder(r); cout<<endl;   // 1 2 4 5 3
+    inorder(r);  cout<<endl;   // 4 2 5 1 3
+    postorder(r);cout<<endl;   // 4 5 2 3 1
+    bfs(r);                    // 1 2 3 4 5
+    return 0;
+}`)+
+ cxCard('O(n)','O(n)','O(n)','O(h)',35)+
+ playground(`<div class="controls">
+   <button class="btn" id="tr-pre">Preorder</button>
+   <button class="btn" id="tr-in">Inorder</button>
+   <button class="btn" id="tr-post">Postorder</button>
+   <button class="btn" id="tr-bfs">BFS</button>
+   <button class="btn" id="tr-reset">Reset</button>
+   <span class="label">Speed:</span><input class="slider" id="tr-speed" type="range" min="50" max="1500" value="500">
+  </div>
+  <div class="viz" id="tr-viz" style="min-height:280px;align-items:center"><svg viewBox="0 0 600 280" class="viz-svg"></svg></div>
+  <div class="status" id="tr-status" aria-live="polite">Click a traversal.</div>`);
+INITS['tree-traversals']=()=>traversalPg();
+
+RENDERERS.heaps=()=>header('Heaps','Max-Heap and Min-Heap — complete binary tree with heap property')+
+ expl(`<p>A <strong>heap</strong> is a complete binary tree where each node satisfies the <strong>heap property</strong>: in a <strong>max-heap</strong>, every parent ≥ its children; in a <strong>min-heap</strong>, every parent ≤ its children.</p>
+  <p>Stored as an array — for node at index i: parent is (i-1)/2, left child is 2i+1, right child is 2i+2. <strong>Insert</strong>: add at end, sift up. <strong>Extract</strong>: swap root with last, shrink, sift down. Both O(log n).</p>`)+
+ codeBlock(`#include <iostream>
+#include <vector>
+using namespace std;
+
+// A binary heap stored in a vector. No pointers needed — the parent/
+// child relationships are computed arithmetically from the index:
+//   parent(i)      = (i - 1) / 2
+//   left  child(i) =  2*i + 1
+//   right child(i) =  2*i + 2
+class MaxHeap {
+    vector<int> h;
+
+    // SIFT UP — used after insertion at the end. Walk toward the root,
+    // swapping with the parent until the heap property holds.
+    void siftUp(int i) {
+        while (i > 0 && h[(i-1)/2] < h[i]) {     // parent smaller than us?
+            swap(h[i], h[(i-1)/2]);              // swap us with the parent
+            i = (i-1)/2;                         // continue from the parent's slot
+        }
+    }
+
+    // SIFT DOWN — used after replacing the root. Walk toward the leaves,
+    // swapping with the LARGER child until the heap property holds.
+    void siftDown(int i) {
+        int n = h.size();
+        while (true) {
+            int l = 2*i+1, r = 2*i+2, lg = i;    // 'lg' = index of the largest of (i, l, r)
+            if (l < n && h[l] > h[lg]) lg = l;
+            if (r < n && h[r] > h[lg]) lg = r;
+            if (lg == i) break;                  // already bigger than both children → done
+            swap(h[i], h[lg]);
+            i = lg;                              // continue at the child's slot
+        }
+    }
+public:
+    // INSERT — append, then sift up. O(log n) — at most log₂(n) swaps.
+    void insert(int v) {
+        h.push_back(v);                          // add at the bottom-right (end of array)
+        siftUp(h.size()-1);                      // restore the heap property
+    }
+
+    // EXTRACT MAX — swap root with last, shrink, sift down. O(log n).
+    int extractMax() {
+        int m = h[0];                            // save the max (root)
+        h[0] = h.back();                         // move last element to root
+        h.pop_back();                            // shrink
+        siftDown(0);                             // root may violate heap property → fix it
+        return m;
+    }
+
+    int peek() const { return h[0]; }            // O(1) look at the max
+};
+
+int main() {
+    MaxHeap mh;
+    for (int x : {3, 1, 6, 5, 2, 4}) mh.insert(x);
+    cout << mh.extractMax() << endl;   // 6
+    cout << mh.extractMax() << endl;   // 5
+    return 0;
+}`)+
+ cxCard('O(log n)','O(log n)','O(log n)','O(n)',40)+
+ playground(`<div class="controls">
+   <input class="input" id="hp-val" type="number" placeholder="value" value="15">
+   <button class="btn" id="hp-ins">Insert</button>
+   <button class="btn" id="hp-ext">Extract Max</button>
+   <button class="btn" id="hp-reset">Reset</button>
+   <span class="label">Speed:</span><input class="slider" id="hp-speed" type="range" min="50" max="1500" value="500">
+  </div>
+  <div class="viz" id="hp-viz" style="min-height:280px;align-items:center"><svg viewBox="0 0 700 280" class="viz-svg"></svg></div>
+  <div class="status" id="hp-status" aria-live="polite">Max-Heap ready.</div>`);
+INITS.heaps=()=>heapPg();
+
+RENDERERS.graphs=()=>header('Graphs','Directed/Undirected, Weighted')+
+ expl(`<p>A <strong>graph</strong> is a set of <strong>vertices</strong> (nodes) and <strong>edges</strong> (connections). In an <strong>undirected</strong> graph, edges have no direction. In a <strong>directed</strong> graph (digraph), edges point from one vertex to another.</p>
+  <p>In a <strong>weighted</strong> graph, each edge has a numeric weight (cost, distance, capacity). Graphs model road networks, web links, social networks, dependencies.</p>`)+
+ codeBlock(`#include <iostream>
+#include <vector>
+using namespace std;
+
+// An edge in a weighted graph: where it goes and how much it costs.
+struct Edge { int to; int weight; };
+
+int main() {
+    // Weighted, DIRECTED graph stored as an adjacency list.
+    // g[u] holds all edges leaving vertex u.
+    int n = 4;
+    vector<vector<Edge>> g(n);             // 4 vertices, each with an empty edge list
+    g[0].push_back({1, 5});                // edge 0 → 1 with weight 5
+    g[0].push_back({2, 3});                // edge 0 → 2 with weight 3
+    g[1].push_back({3, 2});                // edge 1 → 3 with weight 2
+    g[2].push_back({3, 7});                // edge 2 → 3 with weight 7
+    // (For an UNDIRECTED graph, we'd add the reverse edge for each one.)
+
+    // Print every edge.
+    for (int u = 0; u < n; u++)
+        for (auto& e : g[u])               // 'auto&' = reference to Edge, no copy
+            cout << u << " -(" << e.weight << ")-> " << e.to << endl;
+    return 0;
+}`)+
+ cxCard('O(1)','O(V+E)','O(V+E)','O(V+E)',35)+
+ playground(`<div class="diagram"><svg viewBox="0 0 700 280" class="viz-svg" style="max-height:300px">
+   <text x="120" y="20" fill="#00e5ff" font-size="14" text-anchor="middle" font-weight="600">Undirected</text>
+   <line x1="60" y1="80" x2="180" y2="80" class="tree-edge"/><line x1="60" y1="80" x2="120" y2="180" class="tree-edge"/><line x1="180" y1="80" x2="120" y2="180" class="tree-edge"/>
+   <g class="tree-node"><circle cx="60" cy="80" r="18"/><text x="60" y="80">A</text></g>
+   <g class="tree-node"><circle cx="180" cy="80" r="18"/><text x="180" y="80">B</text></g>
+   <g class="tree-node"><circle cx="120" cy="180" r="18"/><text x="120" y="180">C</text></g>
+
+   <defs><marker id="arr1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#8b949e"/></marker></defs>
+   <text x="350" y="20" fill="#00e5ff" font-size="14" text-anchor="middle" font-weight="600">Directed</text>
+   <line x1="290" y1="80" x2="395" y2="80" class="tree-edge" marker-end="url(#arr1)"/>
+   <line x1="350" y1="180" x2="295" y2="95" class="tree-edge" marker-end="url(#arr1)"/>
+   <line x1="410" y1="80" x2="355" y2="170" class="tree-edge" marker-end="url(#arr1)"/>
+   <g class="tree-node"><circle cx="290" cy="80" r="18"/><text x="290" y="80">A</text></g>
+   <g class="tree-node"><circle cx="410" cy="80" r="18"/><text x="410" y="80">B</text></g>
+   <g class="tree-node"><circle cx="350" cy="180" r="18"/><text x="350" y="180">C</text></g>
+
+   <text x="600" y="20" fill="#00e5ff" font-size="14" text-anchor="middle" font-weight="600">Weighted</text>
+   <line x1="540" y1="80" x2="660" y2="80" class="tree-edge"/>
+   <line x1="540" y1="80" x2="600" y2="180" class="tree-edge"/>
+   <line x1="660" y1="80" x2="600" y2="180" class="tree-edge"/>
+   <text x="600" y="70" fill="#ff2a6d" font-size="13" text-anchor="middle" font-weight="600">5</text>
+   <text x="555" y="140" fill="#ff2a6d" font-size="13" text-anchor="middle" font-weight="600">3</text>
+   <text x="650" y="140" fill="#ff2a6d" font-size="13" text-anchor="middle" font-weight="600">7</text>
+   <g class="tree-node"><circle cx="540" cy="80" r="18"/><text x="540" y="80">A</text></g>
+   <g class="tree-node"><circle cx="660" cy="80" r="18"/><text x="660" y="80">B</text></g>
+   <g class="tree-node"><circle cx="600" cy="180" r="18"/><text x="600" y="180">C</text></g>
+  </svg></div>`);
+
+RENDERERS['graph-rep']=()=>header('Graph Representations','Adjacency Matrix vs Adjacency List')+
+ expl(`<p><strong>Adjacency Matrix</strong>: a V×V matrix where M[u][v] = 1 (or weight) if there's an edge u→v. O(V²) space — wasteful for sparse graphs. O(1) edge lookup.</p>
+  <p><strong>Adjacency List</strong>: an array of lists; list[u] contains u's neighbors. O(V+E) space — efficient for sparse graphs. O(deg(u)) edge lookup.</p>`)+
+ codeBlock(`#include <iostream>
+#include <vector>
+using namespace std;
+
+int main() {
+    int n = 4;     // 4 vertices: 0, 1, 2, 3
+
+    // -------------------------------------------------------------
+    // ADJACENCY MATRIX — an n×n grid. M[u][v] = 1 if edge u-v exists.
+    // Space: O(V²). Edge-existence check: O(1). Iterating neighbors: O(V).
+    // Best for DENSE graphs (many edges) or when you check edges a lot.
+    // -------------------------------------------------------------
+    vector<vector<int>> M(n, vector<int>(n, 0));   // start all zeros
+    // For an UNDIRECTED graph, set both M[u][v] AND M[v][u].
+    M[0][1] = M[1][0] = 1;
+    M[0][2] = M[2][0] = 1;
+    M[1][2] = M[2][1] = 1;
+    M[2][3] = M[3][2] = 1;
+
+    // -------------------------------------------------------------
+    // ADJACENCY LIST — array of vectors. L[u] = list of u's neighbors.
+    // Space: O(V + E). Edge-existence check: O(deg(u)). Best for SPARSE graphs.
+    // -------------------------------------------------------------
+    vector<vector<int>> L(n);
+    L[0] = {1, 2};
+    L[1] = {0, 2};
+    L[2] = {0, 1, 3};
+    L[3] = {2};
+
+    // Edge query with the matrix is dirt-cheap:
+    cout << M[0][3] << endl;        // 0 → no edge between 0 and 3
+
+    // Same query with the list — scan u's neighbors:
+    bool found = false;
+    for (int v : L[0]) if (v == 3) found = true;   // O(deg(0))
+    return 0;
+}`)+
+ cxCard('O(V²)','O(V²)','O(V²)','O(V+E)',50)+
+ playground(`<div class="diagram"><svg viewBox="0 0 700 280" class="viz-svg" style="max-height:300px">
+   <text x="150" y="20" fill="#00e5ff" font-size="14" text-anchor="middle" font-weight="600">Graph</text>
+   <line x1="100" y1="80" x2="200" y2="80" class="tree-edge"/>
+   <line x1="100" y1="80" x2="100" y2="180" class="tree-edge"/>
+   <line x1="200" y1="80" x2="200" y2="180" class="tree-edge"/>
+   <line x1="100" y1="180" x2="200" y2="180" class="tree-edge"/>
+   <g class="tree-node"><circle cx="100" cy="80" r="18"/><text x="100" y="80">0</text></g>
+   <g class="tree-node"><circle cx="200" cy="80" r="18"/><text x="200" y="80">1</text></g>
+   <g class="tree-node"><circle cx="100" cy="180" r="18"/><text x="100" y="180">2</text></g>
+   <g class="tree-node"><circle cx="200" cy="180" r="18"/><text x="200" y="180">3</text></g>
+
+   <text x="400" y="20" fill="#00e5ff" font-size="14" text-anchor="middle" font-weight="600">Adjacency Matrix</text>
+   ${(()=>{const M=[[0,1,1,0],[1,0,0,1],[1,0,0,1],[0,1,1,0]];let s='';for(let i=0;i<4;i++)for(let j=0;j<4;j++){s+=`<rect x="${340+j*30}" y="${40+i*30}" width="28" height="28" fill="${M[i][j]?'rgba(0,229,255,0.2)':'rgba(0,0,0,0.3)'}" stroke="#444"/><text x="${354+j*30}" y="${58+i*30}" fill="#e6edf3" font-size="12" text-anchor="middle" font-family="monospace">${M[i][j]}</text>`;}return s;})()}
+
+   <text x="600" y="20" fill="#00e5ff" font-size="14" text-anchor="middle" font-weight="600">Adjacency List</text>
+   <text x="520" y="60" fill="#e6edf3" font-size="12" font-family="monospace">0 → [1, 2]</text>
+   <text x="520" y="90" fill="#e6edf3" font-size="12" font-family="monospace">1 → [0, 3]</text>
+   <text x="520" y="120" fill="#e6edf3" font-size="12" font-family="monospace">2 → [0, 3]</text>
+   <text x="520" y="150" fill="#e6edf3" font-size="12" font-family="monospace">3 → [1, 2]</text>
+   <text x="600" y="240" fill="#8b949e" font-size="11" text-anchor="middle">Matrix: O(V²) space • List: O(V+E) space</text>
+  </svg></div>`);
+
+RENDERERS['graph-traversals']=()=>header('Graph Traversals','DFS uses a stack; BFS uses a queue')+
+ expl(`<p><strong>DFS (Depth-First Search)</strong> explores as far as possible along each branch before backtracking. Use recursion or an explicit stack. Useful for cycle detection, topological sort, connectivity.</p>
+  <p><strong>BFS (Breadth-First Search)</strong> explores all neighbors at the current depth before moving deeper. Uses a queue. Gives shortest path in unweighted graphs.</p>
+  <p>Both run in O(V + E) on adjacency-list representation.</p>`)+
+ codeBlock(`#include <iostream>
+#include <vector>
+#include <queue>
+using namespace std;
+
+vector<vector<int>> g;       // adjacency list
+vector<bool> visited;        // marks which vertices we've already explored
+
+// ---------------------------------------------------------------------
+// DFS — go as deep as possible, then backtrack. Implemented with
+// recursion (which uses the program's CALL STACK implicitly).
+// Use cases: cycle detection, topological sort, finding connected components.
+// ---------------------------------------------------------------------
+void dfs(int u) {
+    visited[u] = true;                          // mark BEFORE recursing — prevents revisits
+    cout << u << " ";
+    for (int v : g[u])                          // for each neighbor of u…
+        if (!visited[v]) dfs(v);                //   …recurse into it if unseen
+}
+
+// ---------------------------------------------------------------------
+// BFS — visit all neighbors at the current "depth" before going deeper.
+// Uses an explicit QUEUE. In an UNWEIGHTED graph, BFS finds the
+// shortest path (in number of edges) from the start to every vertex.
+// ---------------------------------------------------------------------
+void bfs(int start) {
+    visited.assign(g.size(), false);            // reset visited array
+    queue<int> q;
+    q.push(start);
+    visited[start] = true;                      // IMPORTANT: mark when ENQUEUEING, not when popping —
+                                                // otherwise a vertex could end up in the queue twice.
+    while (!q.empty()) {
+        int u = q.front(); q.pop();
+        cout << u << " ";
+        for (int v : g[u])
+            if (!visited[v]) {
+                visited[v] = true;
+                q.push(v);
+            }
+    }
+}
+
+int main() {
+    // Graph:  0 — 1
+    //         | \\ |
+    //         2 — 3 — 4
+    g = {{1,2},{0,3},{0,3},{1,2,4},{3}};
+    visited.assign(5, false); dfs(0); cout << endl;   // e.g. 0 1 3 2 4
+    bfs(0);                                           // e.g. 0 1 2 3 4
+    return 0;
+}`)+
+ cxCard('O(V+E)','O(V+E)','O(V+E)','O(V)',35)+
+ playground(`<div class="controls">
+   <button class="btn" id="gt-dfs">Run DFS</button>
+   <button class="btn" id="gt-bfs">Run BFS</button>
+   <button class="btn" id="gt-reset">Reset</button>
+   <span class="label">Speed:</span><input class="slider" id="gt-speed" type="range" min="50" max="1500" value="500">
+  </div>
+  <div class="viz" id="gt-viz" style="min-height:300px;align-items:center"><svg viewBox="0 0 600 300" class="viz-svg"></svg></div>
+  <div class="status" id="gt-status" aria-live="polite">Start from node 0.</div>`);
+INITS['graph-traversals']=()=>graphTraversalPg();
+
+RENDERERS.dijkstra=()=>header("Dijkstra's Shortest Path",'Greedy shortest-path on graphs with non-negative weights')+
+ expl(`<p><strong>Dijkstra's algorithm</strong> finds the shortest path from a source to every other vertex in a graph with non-negative edge weights.</p>
+  <p>Maintain a distance array (∞ initially, 0 for source) and a priority queue of (distance, vertex). Repeatedly extract the closest unfinalized vertex, then <strong>relax</strong> all its outgoing edges. Runs in O((V+E) log V) with a binary heap.</p>`)+
+ codeBlock(`#include <iostream>
+#include <vector>
+#include <queue>
+#include <climits>          // for INT_MAX
+using namespace std;
+
+struct Edge { int to, w; };  // edge to vertex 'to' with weight 'w'
+vector<vector<Edge>> g;
+
+// ---------------------------------------------------------------------
+// Dijkstra's algorithm — shortest paths from 'src' to ALL other vertices.
+// Requires NON-NEGATIVE edge weights (negative weights → use Bellman-Ford).
+//
+// Idea: greedily pick the unfinalized vertex with the smallest known
+// distance, then "relax" its outgoing edges (try to improve neighbors).
+// A min-heap (priority_queue) gives us the smallest in O(log V).
+// Total: O((V+E) log V).
+// ---------------------------------------------------------------------
+vector<int> dijkstra(int src, int n) {
+    vector<int> dist(n, INT_MAX);              // ∞ for every unreached vertex
+    // Min-heap of (distance, vertex). 'greater<>' makes it a MIN-heap.
+    priority_queue<pair<int,int>, vector<pair<int,int>>, greater<>> pq;
+
+    dist[src] = 0;                             // distance to source is 0
+    pq.push({0, src});
+
+    while (!pq.empty()) {
+        auto [d, u] = pq.top(); pq.pop();      // C++17 structured binding: d = distance, u = vertex
+        if (d > dist[u]) continue;             // STALE entry — we already found a shorter path to u.
+                                               // (We don't decrease keys in std::priority_queue;
+                                               //  instead we push duplicates and skip outdated ones.)
+        // RELAX every outgoing edge of u.
+        for (auto& e : g[u]) {
+            int nd = d + e.w;                  // candidate new distance to e.to
+            if (nd < dist[e.to]) {             // is going via u shorter than what we had?
+                dist[e.to] = nd;               // YES — update
+                pq.push({nd, e.to});           // and push the improved estimate
+            }
+        }
+    }
+    return dist;
+}
+
+int main() {
+    int n = 5; g.assign(n, {});
+    g[0] = {{1,4},{2,1}};        // 0→1 (cost 4), 0→2 (cost 1)
+    g[1] = {{3,1}};
+    g[2] = {{1,2},{3,5}};
+    g[3] = {{4,3}};
+    auto d = dijkstra(0, n);
+    for (int x : d) cout << x << " ";   // 0 3 1 4 7  (shortest distances from 0)
+    return 0;
+}`)+
+ cxCard('O((V+E) log V)','O((V+E) log V)','O((V+E) log V)','O(V)',55)+
+ playground(`<div class="controls">
+   <span class="label">Source:</span><input class="input" id="dj-src" type="number" value="0" style="width:70px">
+   <button class="btn" id="dj-run">Run</button>
+   <button class="btn" id="dj-step">Step</button>
+   <button class="btn" id="dj-reset">Reset</button>
+   <span class="label">Speed:</span><input class="slider" id="dj-speed" type="range" min="50" max="1500" value="600">
+  </div>
+  <div class="viz" id="dj-viz" style="min-height:300px;align-items:center"><svg viewBox="0 0 600 300" class="viz-svg"></svg></div>
+  <div class="status" id="dj-status" aria-live="polite">Set source and click Run.</div>`);
+INITS.dijkstra=()=>dijkstraPg();
+</script>
+<script>
+// ===== PLAYGROUNDS: TREES / GRAPHS =====
+function layoutTree(root){
+  if(!root)return [];
+  const positions=[];
+  let idx=0;
+  function inorderPos(n,depth){
+    if(!n)return;
+    inorderPos(n.l,depth+1);
+    n._x=idx++;n._d=depth;
+    positions.push(n);
+    inorderPos(n.r,depth+1);
+  }
+  inorderPos(root,0);
+  return positions;
+}
+function drawTreeSVG(svgEl,root,W,H,hl){
+  hl=hl||{};
+  const nodes=layoutTree(root);
+  if(nodes.length===0){svgEl.innerHTML='<text x="50%" y="50%" fill="#8b949e" text-anchor="middle">Empty tree</text>';return;}
+  const xMax=Math.max(...nodes.map(n=>n._x));
+  const dMax=Math.max(...nodes.map(n=>n._d));
+  const pad=40;
+  nodes.forEach(n=>{
+    n.px=xMax===0?W/2:pad+(n._x/xMax)*(W-2*pad);
+    n.py=pad+(n._d/(Math.max(dMax,1)))*(H-2*pad);
+  });
+  let edges='';
+  nodes.forEach(n=>{
+    if(n.l){edges+=`<line x1="${n.px}" y1="${n.py}" x2="${n.l.px}" y2="${n.l.py}" class="tree-edge"/>`;}
+    if(n.r){edges+=`<line x1="${n.px}" y1="${n.py}" x2="${n.r.px}" y2="${n.r.py}" class="tree-edge"/>`;}
+  });
+  let nodesHtml=nodes.map(n=>{
+    const cls=hl[n.v]==='visit'?'tree-node visit':(hl[n.v]==='found'?'tree-node found':'tree-node');
+    return `<g class="${cls}"><circle cx="${n.px}" cy="${n.py}" r="18"/><text x="${n.px}" y="${n.py}">${n.v}</text></g>`;
+  }).join('');
+  svgEl.innerHTML=edges+nodesHtml;
+}
+
+function bstPg(){
+  const viz=$('bst-viz').querySelector('svg'),status=$('bst-status'),val=$('bst-val');
+  let root=null;
+  function insert(node,v){if(!node)return {v,l:null,r:null};if(v<node.v)node.l=insert(node.l,v);else if(v>node.v)node.r=insert(node.r,v);return node;}
+  function search(node,v){if(!node)return null;if(node.v===v)return node;return v<node.v?search(node.l,v):search(node.r,v);}
+  function minN(n){while(n.l)n=n.l;return n;}
+  function remove(node,v){
+    if(!node)return null;
+    if(v<node.v)node.l=remove(node.l,v);
+    else if(v>node.v)node.r=remove(node.r,v);
+    else{
+      if(!node.l)return node.r;
+      if(!node.r)return node.l;
+      const s=minN(node.r);node.v=s.v;node.r=remove(node.r,s.v);
+    }
+    return node;
+  }
+  function reset(){root=null;for(const v of [50,30,70,20,40,60,80,10,25])root=insert(root,v);draw();}
+  function draw(hl){drawTreeSVG(viz,root,700,260,hl);}
+  reset();
+  $('bst-ins').addEventListener('click',async()=>{
+    const v=parseInt(val.value);if(isNaN(v))return;
+    let cur=root,path=[];
+    while(cur){path.push(cur);if(v===cur.v){status.textContent='Value exists.';return;}cur=v<cur.v?cur.l:cur.r;}
+    for(const n of path){draw({[n.v]:'visit'});await sleep(350);}
+    root=insert(root,v);draw({[v]:'found'});
+    status.innerHTML=`Inserted <span class="hl">${v}</span>`;
+  });
+  $('bst-find').addEventListener('click',async()=>{
+    const v=parseInt(val.value);if(isNaN(v))return;
+    let cur=root;
+    while(cur){
+      draw({[cur.v]:'visit'});await sleep(400);
+      if(cur.v===v){draw({[cur.v]:'found'});status.innerHTML=`Found <span class="hl">${v}</span>`;confetti();return;}
+      cur=v<cur.v?cur.l:cur.r;
+    }
+    draw();status.textContent=`${v} not found`;
+  });
+  $('bst-rm').addEventListener('click',()=>{
+    const v=parseInt(val.value);if(isNaN(v))return;
+    if(!search(root,v)){status.textContent='Not found';return;}
+    root=remove(root,v);draw();status.innerHTML=`Deleted <span class="hl">${v}</span>`;
+  });
+  $('bst-reset').addEventListener('click',reset);
+}
+
+function traversalPg(){
+  const viz=$('tr-viz').querySelector('svg'),status=$('tr-status'),speed=$('tr-speed');
+  const root={v:1,l:{v:2,l:{v:4,l:null,r:null},r:{v:5,l:null,r:null}},r:{v:3,l:{v:6,l:null,r:null},r:{v:7,l:null,r:null}}};
+  let running=false;
+  function draw(hl){drawTreeSVG(viz,root,600,260,hl);}
+  draw();
+  async function run(order){
+    if(running)return;running=true;
+    const visited=[];const hl={};
+    function pre(n){if(!n)return;visited.push(n.v);pre(n.l);pre(n.r);}
+    function inO(n){if(!n)return;inO(n.l);visited.push(n.v);inO(n.r);}
+    function post(n){if(!n)return;post(n.l);post(n.r);visited.push(n.v);}
+    function bfs(){const q=[root];while(q.length){const x=q.shift();visited.push(x.v);if(x.l)q.push(x.l);if(x.r)q.push(x.r);}}
+    if(order==='pre')pre(root);else if(order==='in')inO(root);else if(order==='post')post(root);else bfs();
+    for(const v of visited){hl[v]='visit';draw({...hl});status.innerHTML=`Order: <span class="hl">${visited.slice(0,visited.indexOf(v)+1).join(' → ')}</span>`;await sleep(parseInt(speed.value));}
+    confetti();running=false;
+  }
+  $('tr-pre').addEventListener('click',()=>run('pre'));
+  $('tr-in').addEventListener('click',()=>run('in'));
+  $('tr-post').addEventListener('click',()=>run('post'));
+  $('tr-bfs').addEventListener('click',()=>run('bfs'));
+  $('tr-reset').addEventListener('click',()=>{draw();status.textContent='Ready.';});
+}
+
+function heapPg(){
+  const viz=$('hp-viz').querySelector('svg'),status=$('hp-status'),val=$('hp-val'),speed=$('hp-speed');
+  let h=[50,30,40,10,20,25,15];
+  function draw(hl){
+    if(h.length===0){viz.innerHTML='<text x="50%" y="50%" fill="#8b949e" text-anchor="middle">Empty</text>';return;}
+    const positions=[];const W=700,H=260,pad=40;
+    const lvls=Math.floor(Math.log2(h.length))+1;
+    for(let i=0;i<h.length;i++){
+      const d=Math.floor(Math.log2(i+1));
+      const lvlStart=(1<<d)-1;const lvlSize=1<<d;
+      const pos=i-lvlStart;
+      const x=pad+(pos+0.5)/lvlSize*(W-2*pad);
+      const y=pad+(d/Math.max(lvls-1,1))*(H-2*pad);
+      positions.push({x,y,v:h[i]});
+    }
+    let edges='';
+    for(let i=0;i<h.length;i++){
+      const l=2*i+1,r=2*i+2;
+      if(l<h.length)edges+=`<line x1="${positions[i].x}" y1="${positions[i].y}" x2="${positions[l].x}" y2="${positions[l].y}" class="tree-edge"/>`;
+      if(r<h.length)edges+=`<line x1="${positions[i].x}" y1="${positions[i].y}" x2="${positions[r].x}" y2="${positions[r].y}" class="tree-edge"/>`;
+    }
+    let nodes=positions.map((p,i)=>{
+      const cls=hl&&hl[i]==='visit'?'tree-node visit':(hl&&hl[i]==='found'?'tree-node found':'tree-node');
+      return `<g class="${cls}"><circle cx="${p.x}" cy="${p.y}" r="18"/><text x="${p.x}" y="${p.y}">${p.v}</text></g>`;
+    }).join('');
+    viz.innerHTML=edges+nodes;
+  }
+  draw();
+  async function siftUp(i){
+    while(i>0){
+      const p=Math.floor((i-1)/2);
+      draw({[i]:'visit',[p]:'visit'});
+      await sleep(parseInt(speed.value));
+      if(h[p]<h[i]){[h[p],h[i]]=[h[i],h[p]];draw({[i]:'found',[p]:'found'});await sleep(parseInt(speed.value));i=p;}
+      else break;
+    }
+    draw();
+  }
+  async function siftDown(i){
+    const n=h.length;
+    while(true){
+      const l=2*i+1,r=2*i+2;let lg=i;
+      if(l<n&&h[l]>h[lg])lg=l;
+      if(r<n&&h[r]>h[lg])lg=r;
+      draw({[i]:'visit'});
+      await sleep(parseInt(speed.value));
+      if(lg===i)break;
+      [h[i],h[lg]]=[h[lg],h[i]];draw({[i]:'found',[lg]:'found'});await sleep(parseInt(speed.value));i=lg;
+    }
+    draw();
+  }
+  $('hp-ins').addEventListener('click',async()=>{const v=parseInt(val.value);if(isNaN(v))return;h.push(v);draw({[h.length-1]:'found'});status.innerHTML=`Inserted <span class="hl">${v}</span>, sifting up...`;await sleep(parseInt(speed.value));await siftUp(h.length-1);status.textContent='Done.';});
+  $('hp-ext').addEventListener('click',async()=>{if(h.length===0)return;const m=h[0];h[0]=h.pop();status.innerHTML=`Extracted <span class="hl">${m}</span>, sifting down...`;draw({0:'found'});await sleep(parseInt(speed.value));if(h.length)await siftDown(0);confetti();status.innerHTML=`Max was <span class="hl">${m}</span>`;});
+  $('hp-reset').addEventListener('click',()=>{h=[50,30,40,10,20,25,15];draw();status.textContent='Reset.';});
+}
+
+const SAMPLE_GRAPH={
+  n:7,
+  pos:[{x:300,y:50},{x:150,y:130},{x:450,y:130},{x:80,y:230},{x:220,y:230},{x:400,y:230},{x:520,y:230}],
+  adj:[[1,2],[0,3,4],[0,5,6],[1],[1],[2],[2]]
+};
+function drawGraph(svgEl,visited,current){
+  const g=SAMPLE_GRAPH;visited=visited||{};
+  let edges='';const drawn=new Set();
+  for(let u=0;u<g.n;u++)for(const v of g.adj[u]){const k=Math.min(u,v)+'-'+Math.max(u,v);if(drawn.has(k))continue;drawn.add(k);edges+=`<line x1="${g.pos[u].x}" y1="${g.pos[u].y}" x2="${g.pos[v].x}" y2="${g.pos[v].y}" class="tree-edge"/>`;}
+  let nodes='';for(let i=0;i<g.n;i++){
+    const cls=i===current?'tree-node found':(visited[i]?'tree-node visit':'tree-node');
+    nodes+=`<g class="${cls}"><circle cx="${g.pos[i].x}" cy="${g.pos[i].y}" r="20"/><text x="${g.pos[i].x}" y="${g.pos[i].y}">${i}</text></g>`;
+  }
+  svgEl.innerHTML=edges+nodes;
+}
+function graphTraversalPg(){
+  const viz=$('gt-viz').querySelector('svg'),status=$('gt-status'),speed=$('gt-speed');
+  let running=false;
+  drawGraph(viz);
+  async function dfs(){
+    if(running)return;running=true;
+    const visited={};const order=[];
+    async function go(u){
+      visited[u]=true;order.push(u);
+      drawGraph(viz,visited,u);
+      status.innerHTML=`DFS visit: <span class="hl">${order.join(' → ')}</span>`;
+      await sleep(parseInt(speed.value));
+      for(const v of SAMPLE_GRAPH.adj[u])if(!visited[v])await go(v);
+    }
+    await go(0);confetti();running=false;
+  }
+  async function bfs(){
+    if(running)return;running=true;
+    const visited={0:true};const q=[0];const order=[];
+    while(q.length){
+      const u=q.shift();order.push(u);
+      drawGraph(viz,visited,u);
+      status.innerHTML=`BFS visit: <span class="hl">${order.join(' → ')}</span>`;
+      await sleep(parseInt(speed.value));
+      for(const v of SAMPLE_GRAPH.adj[u])if(!visited[v]){visited[v]=true;q.push(v);}
+    }
+    confetti();running=false;
+  }
+  $('gt-dfs').addEventListener('click',dfs);
+  $('gt-bfs').addEventListener('click',bfs);
+  $('gt-reset').addEventListener('click',()=>{drawGraph(viz);status.textContent='Reset.';});
+}
+
+const DIJKSTRA_GRAPH={
+  n:6,
+  pos:[{x:80,y:150},{x:220,y:60},{x:220,y:240},{x:380,y:60},{x:380,y:240},{x:520,y:150}],
+  edges:[[0,1,4],[0,2,2],[1,2,1],[1,3,5],[2,3,8],[2,4,10],[3,4,2],[3,5,6],[4,5,3]]
+};
+function drawDjGraph(svgEl,dist,visited,current){
+  const g=DIJKSTRA_GRAPH;visited=visited||{};dist=dist||[];
+  let edges='';
+  for(const [u,v,w] of g.edges){
+    const mx=(g.pos[u].x+g.pos[v].x)/2,my=(g.pos[u].y+g.pos[v].y)/2;
+    edges+=`<line x1="${g.pos[u].x}" y1="${g.pos[u].y}" x2="${g.pos[v].x}" y2="${g.pos[v].y}" class="tree-edge"/>`;
+    edges+=`<text x="${mx}" y="${my}" fill="#ff2a6d" font-size="13" text-anchor="middle" font-weight="600">${w}</text>`;
+  }
+  let nodes='';
+  for(let i=0;i<g.n;i++){
+    const cls=i===current?'tree-node found':(visited[i]?'tree-node visit':'tree-node');
+    const d=dist[i]==null||dist[i]===Infinity?'∞':dist[i];
+    nodes+=`<g class="${cls}"><circle cx="${g.pos[i].x}" cy="${g.pos[i].y}" r="20"/><text x="${g.pos[i].x}" y="${g.pos[i].y}">${i}</text></g>`;
+    nodes+=`<text x="${g.pos[i].x}" y="${g.pos[i].y-30}" fill="#00e5ff" font-size="12" text-anchor="middle" font-weight="600">d=${d}</text>`;
+  }
+  svgEl.innerHTML=edges+nodes;
+}
+function dijkstraPg(){
+  const viz=$('dj-viz').querySelector('svg'),status=$('dj-status'),src=$('dj-src'),speed=$('dj-speed');
+  let steps=[],idx=0,running=false;
+  function neighbors(u){const n=[];for(const [a,b,w] of DIJKSTRA_GRAPH.edges){if(a===u)n.push([b,w]);else if(b===u)n.push([a,w]);}return n;}
+  function buildSteps(s){
+    const n=DIJKSTRA_GRAPH.n;
+    const dist=Array(n).fill(Infinity);dist[s]=0;
+    const visited={};
+    steps=[];
+    steps.push({dist:[...dist],visited:{...visited},msg:`Initialize: dist[${s}]=0, others=∞`});
+    while(true){
+      let u=-1,best=Infinity;
+      for(let i=0;i<n;i++)if(!visited[i]&&dist[i]<best){best=dist[i];u=i;}
+      if(u===-1)break;
+      visited[u]=true;
+      steps.push({dist:[...dist],visited:{...visited},current:u,msg:`Pick node ${u} (d=${dist[u]})`});
+      for(const [v,w] of neighbors(u)){
+        if(!visited[v]&&dist[u]+w<dist[v]){
+          dist[v]=dist[u]+w;
+          steps.push({dist:[...dist],visited:{...visited},current:u,msg:`Relax ${u}→${v}: dist[${v}]=${dist[v]}`});
+        }
+      }
+    }
+    steps.push({dist:[...dist],visited:{...visited},msg:`<span class="hl">Done.</span> Distances: [${dist.join(', ')}]`});
+  }
+  function draw(){const s=steps[idx];drawDjGraph(viz,s.dist,s.visited,s.current);status.innerHTML=s.msg;}
+  function reset(){const s=parseInt(src.value)||0;buildSteps(s);idx=0;draw();}
+  reset();
+  $('dj-step').addEventListener('click',()=>{if(idx<steps.length-1){idx++;draw();}else{confetti();}});
+  $('dj-run').addEventListener('click',async()=>{if(running)return;running=true;reset();while(idx<steps.length-1){idx++;draw();await sleep(parseInt(speed.value));}confetti();running=false;});
+  $('dj-reset').addEventListener('click',reset);
+}
+</script>
+<script>
+// ===== RENDERERS: HASHING =====
+RENDERERS['hash-tables']=()=>header('Hash Tables','Map keys to array indices via a hash function')+
+ expl(`<p>A <strong>hash table</strong> stores key-value pairs in an array of size m. A <strong>hash function</strong> h(k) maps each key to an index in [0, m). Average-case insert/search/delete is O(1).</p>
+  <p>When two keys hash to the same index — a <strong>collision</strong> — we need a resolution strategy: chaining (each slot is a list) or open addressing (probe for the next empty slot).</p>`)+
+ codeBlock(`#include <iostream>
+#include <vector>
+#include <list>            // doubly-linked list for the chains
+using namespace std;
+
+// Hash table using SEPARATE CHAINING — each bucket holds a linked
+// list of (key, value) pairs. Collisions are handled by simply
+// appending to the bucket's list.
+class HashTable {
+    int m;                                    // number of buckets
+    vector<list<pair<int,int>>> table;        // m buckets, each a list of pairs
+
+    // Hash function: modulo m. The double-modulo trick '((k%m)+m)%m'
+    // returns a non-negative index even for negative keys.
+    int hash(int k) { return ((k % m) + m) % m; }
+public:
+    HashTable(int size) : m(size), table(size) {}   // create m empty buckets
+
+    // INSERT (or update) a key. Average O(1), worst O(n) if all keys collide.
+    void insert(int k, int v) {
+        for (auto& p : table[hash(k)])        // walk this bucket's chain
+            if (p.first == k) { p.second = v; return; }  // key exists → update
+        table[hash(k)].push_back({k, v});     // not present → append a new pair
+    }
+
+    // LOOKUP by key. Returns -1 if missing (a convention here, since
+    // real code would throw or use std::optional).
+    int get(int k) {
+        for (auto& p : table[hash(k)])
+            if (p.first == k) return p.second;
+        return -1;
+    }
+
+    // DELETE by key. 'remove_if' takes a predicate (here a lambda)
+    // and removes every element for which it returns true.
+    void remove(int k) {
+        table[hash(k)].remove_if([k](auto& p){ return p.first == k; });
+    }
+};
+
+int main() {
+    HashTable t(7);                           // 7 buckets
+    t.insert(15, 100); t.insert(22, 200); t.insert(8, 300);
+    // 15 % 7 = 1, 22 % 7 = 1 → COLLISION, both end up in bucket 1
+    cout << t.get(22);                        // 200
+    return 0;
+}`)+
+ cxCard('O(1)','O(1)','O(n)','O(n)',25)+
+ playground(`<div class="controls">
+   <input class="input" id="ht-key" type="number" placeholder="key" value="15">
+   <button class="btn" id="ht-ins">Insert</button>
+   <button class="btn" id="ht-find">Search</button>
+   <button class="btn" id="ht-rm">Delete</button>
+   <button class="btn" id="ht-reset">Reset</button>
+  </div>
+  <div class="viz" id="ht-viz" style="min-height:280px;align-items:stretch"></div>
+  <div class="status" id="ht-status" aria-live="polite">Hash table size = 7 (chaining).</div>`);
+INITS['hash-tables']=()=>hashTablePg();
+
+RENDERERS['hash-functions']=()=>header('Hash Functions','Modular, Folding, Truncation')+
+ expl(`<p>A good <strong>hash function</strong> is fast, deterministic, and distributes keys uniformly. Three classic schemes:</p>
+  <p><strong>Modular</strong>: h(k) = k mod m (prefer m prime). <strong>Folding</strong>: split k into chunks, sum them, then mod m. <strong>Truncation</strong>: extract specific digits/bits of k (e.g., middle digits).</p>`)+
+ codeBlock(`#include <iostream>
+using namespace std;
+
+// MODULAR HASHING — h(k) = k mod m.
+// Best when m is PRIME and far from powers of 2 (avoids patterns).
+int modular(int k, int m)     { return ((k % m) + m) % m; }  // handle negatives safely
+
+// FOLDING — split the key into equal-sized chunks, sum them, mod m.
+// Spreads information from EVERY digit into the hash, which helps when
+// keys share a common prefix or suffix.
+int folding(int k, int m) {
+    int sum = 0;
+    while (k > 0) {
+        sum += k % 1000;          // grab the last 3 digits
+        k /= 1000;                // chop them off
+    }
+    return sum % m;
+}
+
+// TRUNCATION — pick specific digits/bits of the key.
+// Fast but information-poor: if the chosen part doesn't vary much,
+// you'll get lots of collisions.
+int truncation(int k, int m) {
+    // Take the middle two digits (assuming k has at least 4 digits).
+    // Example: k = 123456 → drop last digit (/10 = 12345) → take last two (%100 = 45).
+    return ((k / 10) % 100) % m;
+}
+
+int main() {
+    int k = 123456, m = 7;
+    cout << modular(k, m)    << endl;     // 123456 % 7 = 4
+    cout << folding(k, m)    << endl;     // (123 + 456) % 7 = 579 % 7 = 5
+    cout << truncation(k, m) << endl;     // 45 % 7 = 3
+    return 0;
+}`)+
+ cxCard('O(1)','O(1)','O(1)','O(1)',10)+
+ playground(`<div class="controls">
+   <span class="label">Key:</span><input class="input" id="hf-key" type="number" value="123456">
+   <span class="label">Table size m:</span><input class="input" id="hf-m" type="number" value="7" style="width:70px">
+   <button class="btn" id="hf-run">Compute</button>
+  </div>
+  <div class="viz" id="hf-viz" style="align-items:center;min-height:180px"></div>
+  <div class="status" id="hf-status" aria-live="polite">Enter a key and click Compute.</div>`);
+INITS['hash-functions']=()=>hashFnPg();
+
+RENDERERS.collisions=()=>header('Collision Resolution','Chaining, Linear Probing, Quadratic Probing')+
+ expl(`<p><strong>Chaining</strong>: each slot holds a linked list of entries. Simple, handles arbitrary load.</p>
+  <p><strong>Open addressing</strong>: keep one entry per slot; on collision, probe other slots. <strong>Linear probing</strong> uses (h(k)+i) mod m — suffers from primary clustering. <strong>Quadratic probing</strong> uses (h(k)+i²) mod m — reduces clustering but can fail to find an empty slot if the table is more than half full.</p>`)+
+ codeBlock(`#include <iostream>
+#include <vector>
+using namespace std;
+
+// =====================================================================
+// LINEAR PROBING — open addressing where on collision we look at the
+// NEXT slot: h, h+1, h+2, ... (modulo m). Simple and cache-friendly,
+// but suffers from PRIMARY CLUSTERING (long runs of full slots).
+// =====================================================================
+class LPHash {
+    int m;
+    vector<int>  tab;             // the table itself
+    vector<bool> used;            // is this slot occupied?
+public:
+    LPHash(int s) : m(s), tab(s, -1), used(s, false) {}
+
+    void insert(int k) {
+        int h = k % m;
+        for (int i = 0; i < m; i++) {       // at most m probes — table won't grow infinitely
+            int idx = (h + i) % m;          // i-th probe: shift by i
+            if (!used[idx]) {               // empty slot found → put the key here
+                tab[idx] = k;
+                used[idx] = true;
+                return;
+            }
+        }
+        // (Real code should resize the table here.)
+    }
+
+    int find(int k) {
+        int h = k % m;
+        for (int i = 0; i < m; i++) {
+            int idx = (h + i) % m;
+            if (!used[idx]) return -1;      // empty slot → key not in table
+                                            // (NOTE: if we supported deletion we'd need a
+                                            //  "tombstone" marker to keep this search valid.)
+            if (tab[idx] == k) return idx;  // found it!
+        }
+        return -1;
+    }
+};
+
+// =====================================================================
+// QUADRATIC PROBING — probe sequence h, h+1², h+2², h+3², ...
+// Spreads collisions farther apart → reduces clustering.
+// Caveat: with some m values, not every slot is reachable; the table
+// should typically stay below 50% full.
+// =====================================================================
+class QPHash {
+    int m;
+    vector<int>  tab;
+    vector<bool> used;
+public:
+    QPHash(int s) : m(s), tab(s, -1), used(s, false) {}
+
+    void insert(int k) {
+        int h = k % m;
+        for (int i = 0; i < m; i++) {
+            int idx = (h + i*i) % m;        // quadratic step: i*i instead of i
+            if (!used[idx]) { tab[idx] = k; used[idx] = true; return; }
+        }
+    }
+};
+
+int main() {
+    LPHash lp(11);
+    for (int k : {15, 26, 4, 9, 37}) lp.insert(k);
+    cout << lp.find(9) << endl;             // prints the slot index of 9
+    return 0;
+}`)+
+ cxCard('O(1)','O(1)','O(n)','O(n)',30)+
+ playground(`<div class="controls">
+   <input class="input" id="cr-key" type="number" placeholder="key" value="15">
+   <button class="btn" id="cr-ins">Insert</button>
+   <button class="btn" id="cr-find">Search</button>
+   <button class="btn" id="cr-reset">Reset</button>
+   <span class="label">Strategy:</span>
+   <select class="input" id="cr-mode" style="width:150px">
+    <option value="chain">Chaining</option>
+    <option value="linear">Linear Probing</option>
+    <option value="quad">Quadratic Probing</option>
+   </select>
+  </div>
+  <div class="viz" id="cr-viz" style="min-height:280px;align-items:stretch"></div>
+  <div class="status" id="cr-status" aria-live="polite">Pick a strategy and insert keys.</div>`);
+INITS.collisions=()=>collisionsPg();
+</script>
+<script>
+// ===== PLAYGROUNDS: HASHING =====
+function hashTablePg(){
+  const viz=$('ht-viz'),status=$('ht-status'),key=$('ht-key');
+  const m=7;
+  let table=Array.from({length:m},()=>[]);
+  function hash(k){return ((k%m)+m)%m;}
+  function draw(hl,hlPink){
+    let html='<div class="hash-table">';
+    for(let i=0;i<m;i++){
+      const cls=i===hl?'hash-bucket hl':(i===hlPink?'hash-bucket hl-pink':'hash-bucket');
+      html+=`<div class="hash-idx">${i}</div><div class="${cls}">`+
+        (table[i].length?table[i].map(k=>`<span class="hash-item">${k}</span>`).join(''):'<span style="color:var(--text-dim);font-size:0.8rem">empty</span>')+'</div>';
+    }
+    html+='</div>';viz.innerHTML=html;
+  }
+  draw();
+  $('ht-ins').addEventListener('click',async()=>{const k=parseInt(key.value);if(isNaN(k))return;const h=hash(k);draw(h);await sleep(300);if(!table[h].includes(k))table[h].push(k);draw(-1,h);status.innerHTML=`Inserted <span class="hl">${k}</span> at index ${h}`;});
+  $('ht-find').addEventListener('click',async()=>{const k=parseInt(key.value);if(isNaN(k))return;const h=hash(k);draw(h);await sleep(400);if(table[h].includes(k)){draw(-1,h);status.innerHTML=`Found <span class="hl">${k}</span> at index ${h}`;confetti();}else{draw();status.textContent=`${k} not found`;}});
+  $('ht-rm').addEventListener('click',()=>{const k=parseInt(key.value);if(isNaN(k))return;const h=hash(k);table[h]=table[h].filter(x=>x!==k);draw();status.innerHTML=`Deleted <span class="hl">${k}</span>`;});
+  $('ht-reset').addEventListener('click',()=>{table=Array.from({length:m},()=>[]);draw();status.textContent='Reset.';});
+}
+
+function hashFnPg(){
+  const viz=$('hf-viz'),status=$('hf-status');
+  function compute(){
+    const k=parseInt($('hf-key').value);const m=parseInt($('hf-m').value);
+    if(isNaN(k)||isNaN(m)||m<=0){status.textContent='Invalid input.';return;}
+    const mod=((k%m)+m)%m;
+    let sum=0,kk=k;while(kk>0){sum+=kk%1000;kk=Math.floor(kk/1000);}const fold=sum%m;
+    const trunc=Math.floor(k/10)%100%m;
+    viz.innerHTML=`<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;width:100%;padding:10px">
+      <div class="card" style="margin:0;text-align:center;padding:16px"><h2 style="margin-bottom:8px">Modular</h2><div style="font-family:monospace;color:var(--text-dim);margin-bottom:8px">${k} mod ${m}</div><div style="font-size:2rem;color:var(--accent-cyan);font-weight:600">${mod}</div></div>
+      <div class="card" style="margin:0;text-align:center;padding:16px"><h2 style="margin-bottom:8px">Folding</h2><div style="font-family:monospace;color:var(--text-dim);margin-bottom:8px">(${sum}) mod ${m}</div><div style="font-size:2rem;color:var(--accent-purple);font-weight:600">${fold}</div></div>
+      <div class="card" style="margin:0;text-align:center;padding:16px"><h2 style="margin-bottom:8px">Truncation</h2><div style="font-family:monospace;color:var(--text-dim);margin-bottom:8px">middle2 mod ${m}</div><div style="font-size:2rem;color:var(--accent-pink);font-weight:600">${trunc}</div></div>
+     </div>`;
+    status.innerHTML=`Hashed <span class="hl">${k}</span> with m=${m}`;
+  }
+  compute();
+  $('hf-run').addEventListener('click',compute);
+}
+
+function collisionsPg(){
+  const viz=$('cr-viz'),status=$('cr-status'),key=$('cr-key'),mode=$('cr-mode');
+  const m=11;
+  let chain=Array.from({length:m},()=>[]);
+  let lin=Array(m).fill(null);
+  let quad=Array(m).fill(null);
+  function draw(hl,hlPink){
+    const md=mode.value;let arr;
+    if(md==='chain'){
+      let html='<div class="hash-table">';
+      for(let i=0;i<m;i++){
+        const cls=i===hl?'hash-bucket hl':(i===hlPink?'hash-bucket hl-pink':'hash-bucket');
+        html+=`<div class="hash-idx">${i}</div><div class="${cls}">`+
+          (chain[i].length?chain[i].map(k=>`<span class="hash-item">${k}</span>`).join(''):'<span style="color:var(--text-dim);font-size:0.8rem">empty</span>')+'</div>';
+      }
+      html+='</div>';viz.innerHTML=html;
+    }else{
+      arr=md==='linear'?lin:quad;
+      let html='<div class="hash-table">';
+      for(let i=0;i<m;i++){
+        const cls=i===hl?'hash-bucket hl':(i===hlPink?'hash-bucket hl-pink':'hash-bucket');
+        html+=`<div class="hash-idx">${i}</div><div class="${cls}">`+
+          (arr[i]!=null?`<span class="hash-item">${arr[i]}</span>`:'<span style="color:var(--text-dim);font-size:0.8rem">empty</span>')+'</div>';
+      }
+      html+='</div>';viz.innerHTML=html;
+    }
+  }
+  draw();
+  async function insert(){
+    const k=parseInt(key.value);if(isNaN(k))return;
+    const md=mode.value;const h=((k%m)+m)%m;
+    if(md==='chain'){
+      draw(h);await sleep(400);
+      if(!chain[h].includes(k))chain[h].push(k);
+      draw(-1,h);status.innerHTML=`Inserted <span class="hl">${k}</span> at ${h} (chained)`;return;
+    }
+    const arr=md==='linear'?lin:quad;
+    for(let i=0;i<m;i++){
+      const idx=md==='linear'?(h+i)%m:(h+i*i)%m;
+      draw(idx);await sleep(350);
+      if(arr[idx]==null){arr[idx]=k;draw(-1,idx);status.innerHTML=`Inserted <span class="hl">${k}</span> at ${idx} (probe ${i})`;return;}
+      if(arr[idx]===k){status.textContent='Already present.';return;}
+    }
+    status.textContent='Table full!';
+  }
+  async function find(){
+    const k=parseInt(key.value);if(isNaN(k))return;
+    const md=mode.value;const h=((k%m)+m)%m;
+    if(md==='chain'){draw(h);await sleep(400);if(chain[h].includes(k)){draw(-1,h);status.innerHTML=`Found <span class="hl">${k}</span>`;confetti();}else{draw();status.textContent='Not found';}return;}
+    const arr=md==='linear'?lin:quad;
+    for(let i=0;i<m;i++){
+      const idx=md==='linear'?(h+i)%m:(h+i*i)%m;
+      draw(idx);await sleep(350);
+      if(arr[idx]==null){draw();status.textContent='Not found';return;}
+      if(arr[idx]===k){draw(-1,idx);status.innerHTML=`Found <span class="hl">${k}</span> at ${idx}`;confetti();return;}
+    }
+    status.textContent='Not found';
+  }
+  function reset(){chain=Array.from({length:m},()=>[]);lin=Array(m).fill(null);quad=Array(m).fill(null);draw();status.textContent='Reset.';}
+  $('cr-ins').addEventListener('click',insert);
+  $('cr-find').addEventListener('click',find);
+  $('cr-reset').addEventListener('click',reset);
+  mode.addEventListener('change',()=>{draw();status.textContent='Strategy: '+mode.options[mode.selectedIndex].text;});
+}
+</script>
+<script>
+// ===== BOOT =====
+buildNav();
+loadTopic('intro');
+
+document.getElementById('hamburger').addEventListener('click',()=>{
+  document.getElementById('sidebar').classList.toggle('open');
+});
+document.addEventListener('keydown',(e)=>{
+  if(e.key==='Escape')document.getElementById('sidebar').classList.remove('open');
+});
+</script>
+</body>
+</html>
